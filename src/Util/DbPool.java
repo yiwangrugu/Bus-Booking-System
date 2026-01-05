@@ -12,7 +12,7 @@ public class DbPool {
     private static final int MAX_WAIT_TIME = 30000;
 
     private static BlockingQueue<Connection> connectionPool;
-    private static String dbUrl = "jdbc:mysql://localhost:3306/booksystem?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static String dbUrl = "jdbc:mysql://localhost:3306/booksystem?useSSL=false&serverTimezone=UTC&characterEncoding=utf8";
     private static String dbUserName = "root";
     private static String dbPassword = "hh2004919";
     private static String jdbcName = "com.mysql.cj.jdbc.Driver";

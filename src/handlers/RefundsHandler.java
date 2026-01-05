@@ -129,8 +129,8 @@ public class RefundsHandler extends BaseHandler {
             sql = sql + whereClause + groupBy;
             PreparedStatement pstmt = connection.prepareStatement(sql);
 
-            if (type.equals("订单号") || type.equals("车次号") || type.equals("出发站") || 
-                type.equals("终点站") || type.equals("乘客姓名") || type.equals("乘客电话")) {
+            if (type.equals("订单号") || type.equals("车次号") || type.equals("出发站") ||
+                    type.equals("终点站") || type.equals("乘客姓名") || type.equals("乘客电话")) {
                 pstmt.setString(1, "%" + keyword + "%");
             } else if (type.equals("发车日期") || type.equals("退订日期")) {
                 pstmt.setString(1, keyword);
