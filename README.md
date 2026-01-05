@@ -147,12 +147,12 @@ java -cp out;lib/sqlite-jdbc-3.36.0.3.jar Main.WebServer
 ### 默认账户
 
 **管理员账户：**
-- 用户名：admin
-- 密码：admin123
+- 用户名：001
+- 密码：111
 
-**测试用户账户：**
-- 用户名：user
-- 密码：user123
+**用户账户：**
+- 用户名：111
+- 密码：111
 
 ## 数据库结构
 
@@ -291,59 +291,6 @@ CREATE TABLE announcements (
 - 使用有意义的变量名
 - 添加必要的注释
 - 保持代码简洁清晰
-
-## 常见问题
-
-### Q: 如何修改服务器端口？
-A: 在 `WebServer.java` 中修改端口号：
-```java
-HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", 8080), 0);
-```
-
-### Q: 如何部署到云服务器？
-A: 参考 [部署指南](#部署到云服务器) 部分
-
-### Q: 如何备份数据库？
-A: 复制 `booking.db` 文件即可
-
-## 部署到云服务器
-
-### 使用云服务器部署
-
-1. 购买云服务器（推荐配置：1核2G，1Mbps带宽）
-2. 安装 Java 环境
-3. 上传项目文件
-4. 启动服务器
-5. 配置防火墙开放 8080 端口
-
-### 使用内网穿透（临时测试）
-
-#### 使用 localtunnel
-```bash
-npm install -g localtunnel
-lt --port 8080
-```
-
-#### 使用 ngrok
-```bash
-ngrok http 8080
-```
-
-#### 使用 frp
-需要一台有公网IP的服务器，参考 [frp 官方文档](https://github.com/fatedier/frp)
-
-## 贡献指南
-
-欢迎提交 Issue 和 Pull Request！
-
-## 许可证
-
-MIT License
-
-## 联系方式
-
-- GitHub: https://github.com/yiwangrugu/Bus-Booking-System
-- Issues: https://github.com/yiwangrugu/Bus-Booking-System/issues
 
 ## 更新日志
 
