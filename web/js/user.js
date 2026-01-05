@@ -7,6 +7,11 @@ let showMyTripsMode = false;
 // 轮询定时器
 let pollingTimer = null;
 
+// 保存搜索状态
+let isSearchActive = false;
+let currentSearchKeyword = '';
+let currentSearchType = '';
+
 // 使用轮询代替 SSE，避免服务器崩溃
 function startPolling() {
     // 清除旧的定时器
@@ -16,7 +21,45 @@ function startPolling() {
 
     // 每 5 秒轮询一次
     pollingTimer = setInterval(() => {
-        loadBuses();
+        // 根据搜索状态决定如何获取车次数据
+        if (isSearchActive) {
+            // 如果有搜索状态，使用保存的搜索参数
+            fetch(`/api/buses?keyword=${currentSearchKeyword}&type=${currentSearchType}`)
+                .then(response => response.json())
+                .then(data => {
+                    const busTable = document.querySelector('#bus-table tbody');
+                    busTable.innerHTML = '';
+
+                    if (data.length === 0) {
+                        const emptyRow = document.createElement('tr');
+                        emptyRow.innerHTML = '<td colspan="8" style="text-align: center; color: #999; padding: 20px;">没有找到匹配的车次数据</td>';
+                        busTable.appendChild(emptyRow);
+                        return;
+                    }
+
+                    data.forEach(bus => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${bus.bno}</td>
+                            <td>${bus.staName}</td>
+                            <td>${bus.endName}</td>
+                            <td>${bus.date}</td>
+                            <td>${bus.time}</td>
+                            <td>${bus.remainSeats}</td>
+                            <td>${bus.price}</td>
+                            <td><button class="book-btn" onclick="selectBus(${JSON.stringify(bus).replace(/"/g, '&quot;')})">购买</button></td>
+                        `;
+                        busTable.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('加载车次数据失败:', error);
+                    showNotification('加载车次数据失败，请稍后重试！', false);
+                });
+        } else {
+            // 如果没有搜索状态，加载全部车次
+            loadBuses();
+        }
         loadOrders();
         loadMyRefunds();
     }, 5000);
@@ -61,7 +104,15 @@ window.addEventListener('load', function () {
     document.getElementById('search-btn').addEventListener('click', searchBuses);
 
     // 绑定返回全部按钮事件
-    document.getElementById('reset-btn').addEventListener('click', loadBuses);
+    document.getElementById('reset-btn').addEventListener('click', function () {
+        // 重置搜索状态
+        isSearchActive = false;
+        currentSearchKeyword = '';
+        currentSearchType = '';
+        // 清空搜索框
+        document.getElementById('search-input').value = '';
+        loadBuses();
+    });
 
     // 绑定修改密码表单提交事件
     document.getElementById('password-form').addEventListener('submit', changePassword);
@@ -166,9 +217,18 @@ function searchBuses() {
     const searchInput = document.getElementById('search-input').value;
 
     if (!searchInput) {
+        // 如果搜索框为空，取消搜索状态
+        isSearchActive = false;
+        currentSearchKeyword = '';
+        currentSearchType = '';
         loadBuses();
         return;
     }
+
+    // 保存搜索状态
+    isSearchActive = true;
+    currentSearchKeyword = searchInput;
+    currentSearchType = searchType;
 
     // 将搜索类型和关键词一起传递给后端
     fetch(`/api/buses?keyword=${searchInput}&type=${searchType}`)

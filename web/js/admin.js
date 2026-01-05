@@ -4,6 +4,11 @@ let isShowingEndedBuses = false;
 // 轮询定时器
 let adminPollingTimer = null;
 
+// 保存搜索状态
+let isSearchActive = false;
+let currentSearchKeyword = '';
+let currentSearchType = '';
+
 // 使用轮询代替 SSE，避免服务器崩溃
 function startAdminPolling() {
     // 清除旧的定时器
@@ -48,6 +53,18 @@ window.addEventListener('load', function () {
 
     // 绑定车次搜索事件
     document.getElementById('bus-search-btn').addEventListener('click', searchBuses);
+
+    // 绑定车次搜索返回按钮事件
+    document.getElementById('bus-reset-btn').addEventListener('click', function () {
+        // 重置搜索状态
+        isSearchActive = false;
+        currentSearchKeyword = '';
+        currentSearchType = '';
+        // 清空搜索框
+        document.getElementById('bus-search').value = '';
+        // 加载全部车次
+        loadBusList();
+    });
 
     // 绑定查看已结束车次按钮事件
     document.getElementById('toggle-ended-buses').addEventListener('click', toggleEndedBuses);
@@ -187,9 +204,15 @@ function showSection(sectionId) {
     const selectedSection = document.getElementById(sectionId);
     selectedSection.classList.add('active');
 
-    // 如果是车次列表模块，重新加载数据
+    // 如果是车次列表模块，根据搜索状态决定如何加载数据
     if (sectionId === 'bus-list') {
-        loadBusList();
+        if (isSearchActive) {
+            // 如果有搜索状态，调用搜索函数
+            searchBuses();
+        } else {
+            // 否则加载全部车次
+            loadBusList();
+        }
     } else if (sectionId === 'order-list') {
         // 如果是订单列表模块，重新加载数据
         loadOrderList();
@@ -213,7 +236,14 @@ function toggleEndedBuses() {
     isShowingEndedBuses = !isShowingEndedBuses;
     const toggleBtn = document.getElementById('toggle-ended-buses');
     toggleBtn.textContent = isShowingEndedBuses ? '查看在售车次' : '查看已结束车次';
-    loadBusList();
+
+    if (isSearchActive) {
+        // 如果有搜索状态，调用搜索函数
+        searchBuses();
+    } else {
+        // 否则加载全部车次
+        loadBusList();
+    }
 }
 
 // 显示指定的任务标签页
@@ -700,6 +730,21 @@ function loadBusList() {
 function searchBuses() {
     const keyword = document.getElementById('bus-search').value;
     const searchType = document.getElementById('bus-search-type').value;
+
+    if (!keyword) {
+        // 如果搜索框为空，取消搜索状态
+        isSearchActive = false;
+        currentSearchKeyword = '';
+        currentSearchType = '';
+        loadBusList();
+        return;
+    }
+
+    // 保存搜索状态
+    isSearchActive = true;
+    currentSearchKeyword = keyword;
+    currentSearchType = searchType;
+
     const url = isShowingEndedBuses ? `/api/buses/ended?keyword=${keyword}&type=${searchType}` : `/api/buses?keyword=${keyword}&type=${searchType}`;
 
     fetch(url)
