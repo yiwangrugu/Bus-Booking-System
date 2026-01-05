@@ -1,10 +1,12 @@
 # Java
 *.class
-*.jar
 *.war
 *.ear
 target/
 out/
+
+# Allow JAR files in lib directory
+!lib/*.jar
 
 # IntelliJ IDEA
 .idea/
