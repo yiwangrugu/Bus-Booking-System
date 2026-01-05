@@ -1,0 +1,1793 @@
+/* 全局样式 - 已移至 common.css */
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* 左侧导航栏 */
+.sidebar {
+    width: 280px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.user-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.user-icon svg {
+    color: white;
+    width: 48px;
+    height: 48px;
+}
+
+.user-info h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: 700;
+}
+
+.btn-icon {
+    margin-right: 12px;
+    vertical-align: middle;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.menu-btn:hover .btn-icon {
+    transform: scale(1.2);
+}
+
+.item-icon {
+    margin-right: 12px;
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+    color: #667eea;
+    transition: transform 0.3s ease;
+}
+
+.dropdown-item:hover .item-icon {
+    transform: scale(1.2);
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    gap: 12px;
+}
+
+.menu-btn {
+    padding: 18px 24px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 20px;
+    font-family: '楷书', Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+}
+
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.menu-btn:hover::before {
+    left: 100%;
+}
+
+.menu-btn:hover,
+.menu-btn.active {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateX(10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* 下拉菜单 */
+.dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.95);
+    min-width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.dropdown-item {
+    width: 100%;
+    padding: 15px 24px;
+    background: transparent;
+    color: #333;
+    border: none;
+    font-size: 18px;
+    font-family: '楷书', Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    position: relative;
+}
+
+.dropdown-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.3s ease;
+}
+
+.dropdown-item:hover::after {
+    width: 100%;
+}
+
+.dropdown-item:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    padding-left: 30px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 右侧主内容区 */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: hidden;
+}
+
+.section {
+    display: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.section.active {
+    display: block;
+}
+
+.section h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+}
+
+/* 搜索容器 */
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    align-items: center;
+}
+
+.search-container select,
+.search-container input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.search-container select {
+    width: 120px;
+}
+
+.search-container input {
+    flex: 1;
+}
+
+.search-container button {
+    padding: 10px 20px;
+    background-color: #764ba2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-container button:hover {
+    background-color: #0097a7;
+}
+
+/* 表格容器，用于支持水平和垂直滚动 */
+.table-container {
+    overflow-x: auto;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    max-height: 400px;
+    scroll-behavior: smooth;
+    transition: scroll-left 0.5s ease-in-out;
+}
+
+/* 我的订单模块的表格容器 */
+#my-orders .table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+/* 我的退票模块的表格容器 */
+#my-refunds .table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+/* 固定表头 */
+#bus-table th,
+#orders-table th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* 表格样式 */
+#bus-table,
+#orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+#bus-table th,
+#bus-table td,
+#orders-table th,
+#orders-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+}
+
+#bus-table th,
+#orders-table th,
+#passengers-table th {
+    background-color: #764ba2;
+    color: white;
+    font-weight: bold;
+}
+
+/* 乘客表格样式 */
+#passengers-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#passengers-table th,
+#passengers-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+}
+
+#passengers-table th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+#passengers-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+#passengers-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#bus-table tr:hover,
+#orders-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+#bus-table tr:nth-child(even),
+#orders-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* 常用乘客模块布局 */
+.passenger-management {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    height: 400px;
+}
+
+.passenger-list {
+    flex: 1;
+    min-width: 0;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.passenger-list h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 18px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.passenger-list .table-container {
+    flex: 1;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* 乘客列表表格样式 */
+#passengers-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+
+    #passengers-table th {
+        background-color: #764ba2;
+        color: white;
+        font-weight: bold;
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+#passengers-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#passengers-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+#passengers-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+#passengers-table tr:last-child td {
+    border-bottom: none;
+}
+
+.add-passenger-form {
+    flex: 0 0 350px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.add-passenger-form h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 18px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+/* 添加乘客表单样式 */
+.add-passenger-form .form-group {
+    margin-bottom: 20px;
+}
+
+.add-passenger-form .form-group label {
+    display: inline-block;
+    width: 100px;
+    text-align: left;
+    margin-right: 15px;
+    color: #555;
+    font-weight: bold;
+}
+
+.add-passenger-form .form-group input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    width: 300px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.add-passenger-form .form-group input:focus {
+    outline: none;
+    border-color: #00bcd4;
+    box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+}
+
+.add-passenger-form .form-actions {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.add-passenger-form .form-actions button {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.add-passenger-form .form-actions button:hover {
+    background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 188, 212, 0.4);
+}
+
+.add-passenger-form .form-actions button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(0, 188, 212, 0.3);
+}
+
+.book-btn {
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.book-btn:hover {
+    background-color: #e53935;
+}
+
+/* 退票须知和我要退票按钮容器 */
+.refund-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0 20px;
+}
+
+/* 退票须知样式 */
+.refund-notice {
+    flex: 1;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border-left: 4px solid #764ba2;
+    margin-right: 15px;
+}
+
+/* 退款原因选项样式 */
+.reason-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.reason-option {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reason-option:hover {
+    background-color: #f5f5f5;
+    border-color: #764ba2;
+}
+
+.reason-option input[type="radio"] {
+    margin-right: 10px;
+}
+
+.reason-option span {
+    font-size: 14px;
+    color: #333;
+}
+
+/* 我要退票按钮 */
+.refund-action-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+    transition: all 0.3s ease;
+}
+
+.refund-action-btn:hover {
+    background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+}
+
+.refund-action-btn:active {
+    transform: translateY(0);
+}
+
+.refund-btn {
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.refund-btn:hover {
+    background-color: #e53935;
+}
+
+/* 禁用的退票按钮 */
+.refund-btn.disabled {
+    background-color: #cccccc;
+    color: #999999;
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* 乘客信息表单 */
+.passenger-form {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    display: none;
+}
+
+.passenger-form.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 乘客选择下拉菜单样式 */
+#select-passenger {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 250px;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+#select-passenger:hover {
+    border-color: #00bcd4;
+}
+
+#select-passenger:focus {
+    outline: none;
+    border-color: #00bcd4;
+    box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+}
+
+/* 乘客信息表单美化 */
+.passenger-form form .form-group {
+    margin-bottom: 15px;
+}
+
+.passenger-form form label {
+    display: inline-block;
+    width: 120px;
+    text-align: right;
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+.passenger-form form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 250px;
+    transition: border-color 0.3s ease;
+}
+
+.passenger-form form input:hover {
+    border-color: #00bcd4;
+}
+
+.passenger-form form input:focus {
+    outline: none;
+    border-color: #00bcd4;
+    box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+}
+
+/* 模拟支付动画 */
+.pay-animation {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.pay-animation.active {
+    display: flex;
+    opacity: 1;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.pay-animation p {
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
+}
+
+.passenger-form h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.passenger-form .form-group {
+    margin-bottom: 15px;
+}
+
+.passenger-form .form-group label {
+    display: inline-block;
+    width: 120px;
+    text-align: right;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.passenger-form .form-group select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    width: 200px;
+}
+
+/* 常用乘客列表删除按钮样式 */
+.delete-btn {
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #e53935;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: inline-block;
+    width: 100px;
+    font-weight: bold;
+}
+
+.form-group input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    width: 200px;
+}
+
+.form-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.form-actions button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.form-actions button:first-child {
+    background-color: #f44336;
+    color: white;
+}
+
+.form-actions button:first-child:hover {
+    background-color: #e53935;
+}
+
+.form-actions button:last-child {
+    background-color: #4caf50;
+    color: white;
+}
+
+.form-actions button:last-child:hover {
+    background-color: #43a047;
+}
+
+/* 修改密码表单 */
+.password-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.password-form .form-group {
+    margin-bottom: 25px;
+}
+
+.password-form .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    text-align: left;
+}
+
+.password-form .form-group input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: white;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.password-form .form-group input:focus {
+    outline: none;
+    border-color: #00bcd4;
+    box-shadow: 0 0 0 4px rgba(0, 188, 212, 0.1);
+    background: #fafafa;
+}
+
+.password-form .form-group input::placeholder {
+    color: #aaa;
+}
+
+/* 密码输入框容器 - 已移至 common.css */
+
+.password-form .form-actions {
+    margin-top: 30px;
+}
+
+/* 我的退票模块样式 */
+.refund-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    color: #6c757d;
+}
+
+.tab-btn.active {
+    color: #764ba2;
+    border-bottom-color: #764ba2;
+    font-weight: bold;
+}
+
+.tab-btn:hover {
+    color: #764ba2;
+    background-color: #f8f9fa;
+}
+
+.refund-list {
+    display: none;
+}
+
+.refund-list.active {
+    display: block;
+}
+
+/* 退票申请表格样式 */
+#pending-refunds-table,
+#approved-refunds-table,
+#rejected-refunds-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+#pending-refunds-table th,
+#pending-refunds-table td,
+#approved-refunds-table th,
+#approved-refunds-table td,
+#rejected-refunds-table th,
+#rejected-refunds-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+}
+
+#pending-refunds-table th,
+#approved-refunds-table th,
+#rejected-refunds-table th {
+    background-color: #764ba2;
+    color: white;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+#pending-refunds-table tr:hover,
+#approved-refunds-table tr:hover,
+#rejected-refunds-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+#pending-refunds-table tr:nth-child(even),
+#approved-refunds-table tr:nth-child(even),
+#rejected-refunds-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* 退票申请操作按钮 */
+.refund-action-btn {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.refund-action-btn:hover {
+    background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+}
+
+.refund-action-btn:active {
+    transform: translateY(0);
+}
+
+.refund-action-btn.disabled {
+    background: #cccccc;
+    color: #999999;
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* 退票申请状态标签 */
+.status-pending {
+    color: #ff9800;
+    font-weight: bold;
+}
+
+.status-approved {
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.status-rejected {
+    color: #f44336;
+    font-weight: bold;
+}
+
+.password-form .form-actions button {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.password-form .form-actions button:hover {
+    background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 188, 212, 0.4);
+}
+
+.password-form .form-actions button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(0, 188, 212, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 300px;
+    }
+
+    .menu-btn {
+        font-size: 18px;
+    }
+
+    .dropdown-item {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 90%;
+    }
+
+    .menu-btn {
+        flex: 1;
+        min-width: 150px;
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .dropdown {
+        position: relative;
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .dropdown-content {
+        right: 0;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+}
+
+/* 自动关闭提示弹窗 */
+.popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    display: none;
+    z-index: 1000;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    max-width: 80%;
+    text-align: center;
+}
+
+/* 用户端特有的弹窗样式 */
+.popup.success {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-left: 4px solid #667eea;
+}
+
+.popup.error {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-left: 4px solid #667eea;
+}
+
+#confirm-ok {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+#confirm-ok:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+#confirm-cancel {
+    background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+    color: white;
+}
+
+#confirm-cancel:hover {
+    background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 188, 212, 0.3);
+}
+
+@keyframes fadein {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+
+    to {
+        top: 20px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        top: 20px;
+        opacity: 1;
+    }
+
+    to {
+        top: 0;
+        opacity: 0;
+    }
+}
+
+/* 确认弹窗 */
+.confirm-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 拒绝理由详情弹窗 */
+/* 拒绝理由弹窗样式 */
+#reject-reason-popup {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#reject-reason-popup.show {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+#reject-reason-popup .reject-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background-color: #fff3cd;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#reject-reason-popup .reject-icon svg {
+    color: #ffc107;
+}
+
+#reject-reason-popup #reject-reason-text {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #333;
+    line-height: 1.6;
+    text-align: left;
+}
+
+#reject-reason-popup #reject-reason-ok {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* 公告弹窗特殊样式 */
+#announcement-popup {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* 公告弹窗显示状态 */
+#announcement-popup.show {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.confirm-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    animation: modalFadeIn 0.3s ease;
+}
+
+.confirm-content p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.confirm-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.confirm-buttons button {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#confirm-ok {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#confirm-ok:hover {
+    background-color: #45a049;
+}
+
+#confirm-cancel {
+    background-color: #f44336;
+    color: white;
+}
+
+#confirm-cancel:hover {
+    background-color: #e53935;
+}
+
+/* 退票确认弹窗样式 */
+#refund-confirm-popup .confirm-content {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.99) 100%);
+    border-radius: 20px;
+    box-shadow: 0 25px 80px rgba(102, 126, 234, 0.35), 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    padding: 40px;
+    backdrop-filter: blur(15px);
+    max-width: 450px;
+    position: relative;
+    overflow: hidden;
+    animation: popupAppear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#refund-confirm-popup .confirm-content::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    animation: rotateBackground 20s linear infinite;
+    z-index: -1;
+}
+
+#refund-confirm-popup .popup-title h3 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.confirm-message-content {
+    padding: 25px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    border-radius: 16px;
+    margin: 20px 0;
+}
+
+.confirm-message-content p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #444;
+    margin: 0;
+}
+
+#refund-confirm-ok {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 35px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s ease;
+}
+
+#refund-confirm-ok:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+#refund-confirm-ok:active {
+    transform: translateY(0);
+}
+
+#refund-confirm-cancel {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    color: white;
+    padding: 12px 35px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+    transition: all 0.3s ease;
+}
+
+#refund-confirm-cancel:hover {
+    background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+}
+
+#refund-confirm-cancel:active {
+    transform: translateY(0);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 公告滚动横幅样式 */
+.announcement-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 8px 0;
+    position: fixed;
+    top: 0;
+    left: 280px;
+    /* 调整左侧位置，与侧边栏右侧对齐 */
+    width: calc(100% - 280px);
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+    overflow: hidden;
+    display: none;
+    height: 36px;
+    /* 减小高度 */
+}
+
+/* 公告横幅内容样式 */
+.banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    padding: 0 20px;
+}
+
+/* 公告图标样式 */
+.announcement-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 2px;
+    color: white;
+    animation: bellRing 2s ease-in-out infinite;
+}
+
+.announcement-icon svg {
+    stroke: white;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
+}
+
+/* 小喇叭动画 */
+@keyframes bellRing {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: rotate(-5deg);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: rotate(5deg);
+    }
+}
+
+/* 公告弹窗样式 */
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-image-slice: 1;
+}
+
+/* 弹窗标题容器 */
+.popup-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.popup-title h3 {
+    margin: 0;
+    color: #764ba2;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: 'Microsoft YaHei', 'Arial', sans-serif;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(118, 75, 162, 0.3);
+}
+
+/* 弹窗中的公告图标 */
+#announcement-popup .announcement-icon {
+    color: #667eea;
+    animation: bellRing 2s ease-in-out infinite;
+}
+
+#announcement-popup .announcement-icon svg {
+    stroke: #667eea;
+    filter: drop-shadow(0 0 2px rgba(102, 126, 234, 0.5));
+}
+
+@keyframes titlePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
+    }
+}
+
+.close-btn {
+    font-size: 32px;
+    cursor: pointer;
+    color: #999;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: rgba(102, 126, 234, 0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid transparent;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+    border-color: #ff4444;
+    transform: rotate(90deg) scale(1.2);
+    box-shadow: 0 5px 15px rgba(255, 68, 68, 0.3);
+}
+
+/* 美化公告弹窗容器 */
+#announcement-popup .confirm-content {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.99) 100%);
+    border-radius: 24px;
+    box-shadow: 0 25px 80px rgba(102, 126, 234, 0.35), 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    padding: 40px;
+    backdrop-filter: blur(15px);
+    max-width: 520px;
+    position: relative;
+    overflow: hidden;
+    animation: popupAppear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popupAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+#announcement-popup .confirm-content::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    animation: rotateBackground 20s linear infinite;
+    z-index: -1;
+}
+
+@keyframes rotateBackground {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 美化公告弹窗内容 */
+#announcement-popup #announcement-popup-text {
+    font-size: 19px;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 35px;
+    padding: 25px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    border-radius: 16px;
+    border-left: 5px solid #667eea;
+    font-family: 'Microsoft YaHei', 'Arial', sans-serif;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+    transition: all 0.3s ease;
+}
+
+#announcement-popup #announcement-popup-text:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+}
+
+#announcement-popup #announcement-popup-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    opacity: 0.8;
+}
+
+/* 美化公告弹窗按钮 */
+#announcement-popup #announcement-ok {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 45px;
+    font-size: 19px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    font-family: 'Microsoft YaHei', 'Arial', sans-serif;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+#announcement-popup #announcement-ok::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+#announcement-popup #announcement-ok:hover::before {
+    left: 100%;
+}
+
+#announcement-popup #announcement-ok:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.7);
+    transform: translateY(-4px) scale(1.02);
+}
+
+#announcement-popup #announcement-ok:active {
+    transform: translateY(-2px) scale(0.98);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+/* 优化公告弹窗动画 */
+#announcement-popup {
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 调整主内容区的上边距，避免被公告横幅遮挡 */
+.main-content {
+    margin-top: 60px;
+}
+
+.announcement-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: bannerShine 3s infinite;
+}
+
+@keyframes bannerShine {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+.banner-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    height: 100%;
+    /* 设置高度与banner一致，确保内容垂直居中 */
+}
+
+#announcement-text {
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+}
+
+.scroll-container {
+    display: flex;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.scroll-text {
+    color: white;
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 500;
+    white-space: nowrap;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    animation: scroll-left 20s linear infinite;
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+}
+
+#announcement-marquee-copy {
+    animation-delay: 20s;
+    /* 延迟播放，确保前一个完全消失后立即开始 */
+}
+
+@keyframes scroll-left {
+    0% {
+        left: 100%;
+        opacity: 1;
+    }
+
+    100% {
+        left: -150%;
+        opacity: 1;
+    }
+}
+
+/* 响应式公告横幅 */
+@media (max-width: 768px) {
+    .banner-content {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    #announcement-text {
+        font-size: 14px;
+    }
+
+    #announcement-marquee {
+        font-size: 14px;
+        width: 100%;
+    }
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巴士订票系统</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h1>巴士订票管理系统</h1>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">账 号:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">密 码:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" name="password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('password')">👁️</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="power">身 份:</label>
+                    <select id="power" name="power">
+                        <option value="用户">用 户</option>
+                        <option value="管理员">管理员</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="login-btn">登 录</button>
+                    <button type="button" class="register-btn" onclick="window.location.href='register.html'">注
+                        册</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 自定义提示弹窗 -->
+    <div id="custom-popup" class="popup"></div>
+
+    <!-- 确认弹窗 -->
+    <div id="confirm-popup" class="confirm-popup">
+        <div class="confirm-content">
+            <p id="confirm-text"></p>
+            <div class="confirm-buttons">
+                <button id="confirm-ok">确定</button>
+                <button id="confirm-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/login.js"></script>
+</body>
+
+</html>

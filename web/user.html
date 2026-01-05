@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巴士订票系统 - 用户端</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/user.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 左侧导航栏 -->
+        <aside class="sidebar">
+            <div class="user-info">
+                <div class="user-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5 22h14"></path>
+                        <path d="M12 12v10"></path>
+                    </svg>
+                </div>
+                <h2>用户中心</h2>
+            </div>
+            <nav class="menu">
+                <button class="menu-btn active" onclick="showSection('book-ticket')">
+                    <svg class="btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="3" x2="16" y2="21"></line>
+                        <line x1="8" y1="3" x2="8" y2="21"></line>
+                        <line x1="3" y1="8" x2="21" y2="8"></line>
+                        <line x1="3" y1="16" x2="21" y2="16"></line>
+                    </svg>
+                    订 购 车 票
+                </button>
+                <button class="menu-btn" onclick="showSection('my-orders')">
+                    <svg class="btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2z"></path>
+                        <path
+                            d="M18 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 2 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 18 16z">
+                        </path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    我 的 订 单
+                </button>
+                <button class="menu-btn" id="my-refunds-btn" onclick="showSection('my-refunds')">
+                    <svg class="btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2z"></path>
+                        <path
+                            d="M18 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 2 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 18 16z">
+                        </path>
+                        <polyline points="12 2 12 12 15 15"></polyline>
+                        <path d="M9 9l3-3 3 3"></path>
+                    </svg>
+                    我 的 退 票
+                </button>
+                <div class="dropdown">
+                    <button class="menu-btn dropdown-btn">
+                        <svg class="btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        个 人 中 心
+                    </button>
+                    <div class="dropdown-content">
+                        <button class="dropdown-item" onclick="showSection('frequent-passengers')">
+                            <svg class="item-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            常 用 乘 客
+                        </button>
+                        <button class="dropdown-item" onclick="showSection('change-password')">
+                            <svg class="item-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            修 改 密 码
+                        </button>
+                        <button class="dropdown-item" onclick="logout()">
+                            <svg class="item-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            退 出 登 录
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- 右侧主内容区 -->
+        <main class="main-content">
+            <!-- 公告滚动横幅 -->
+            <div id="announcement-banner" class="announcement-banner" onclick="showAnnouncementPopup()">
+                <div class="banner-content">
+                    <div class="announcement-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                    </div>
+                    <span id="announcement-text">通知：</span>
+                    <div class="scroll-container">
+                        <div id="announcement-marquee" class="scroll-text">正在加载公告内容...</div>
+                        <div id="announcement-marquee-copy" class="scroll-text">正在加载公告内容...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 订购车票模块 -->
+            <section id="book-ticket" class="section active">
+                <h1>订购车票</h1>
+                <div class="search-container">
+                    <select id="search-type" onchange="handleSearchTypeChange()">
+                        <option value="车次号">车次号</option>
+                        <option value="发车日期">发车日期</option>
+                        <option value="出发站">出发站</option>
+                        <option value="终点站">终点站</option>
+                    </select>
+                    <input type="text" id="search-input" placeholder="请输入搜索内容" onfocus="handleInputFocus()"
+                        onblur="handleInputBlur()">
+                    <button id="search-btn">查询</button>
+                    <button id="reset-btn">返回</button>
+                </div>
+                <div class="table-container">
+                    <table id="bus-table">
+                        <thead>
+                            <tr>
+                                <th>车次</th>
+                                <th>出发站</th>
+                                <th>终点站</th>
+                                <th>发车日期</th>
+                                <th>发车时间</th>
+                                <th>剩余座位数</th>
+                                <th>票价</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 动态生成数据 -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 乘客信息表单 -->
+                <div id="passenger-form" class="passenger-form">
+                    <h2>填写乘客信息</h2>
+                    <div class="form-group">
+                        <label for="select-passenger">猜你想用：</label>
+                        <select id="select-passenger">
+                            <option value="">请选择常用乘客</option>
+                            <!-- 动态生成常用乘客选项 -->
+                        </select>
+                    </div>
+                    <form>
+                        <div class="form-group">
+                            <label for="idno">身 份 证：</label>
+                            <input type="text" id="idno" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">姓 名：</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">联 系 方 式：</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" onclick="cancelBooking()">取消</button>
+                            <button type="button" onclick="confirmBooking()">购买</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 模拟支付动画 -->
+                <div id="pay-animation" class="pay-animation">
+                    <div class="spinner"></div>
+                    <p>正在处理支付，请稍候...</p>
+                </div>
+            </section>
+
+            <!-- 我的订单模块 -->
+            <section id="my-orders" class="section">
+                <h1>我的订单</h1>
+                <div class="table-container">
+                    <table id="orders-table">
+                        <thead>
+                            <tr>
+                                <th>订单号</th>
+                                <th>车次</th>
+                                <th>出发站</th>
+                                <th>终点站</th>
+                                <th>发车日期</th>
+                                <th>发车时间</th>
+                                <th>票价</th>
+                                <th>购买日期</th>
+                                <th>购买时间</th>
+                                <th>乘客姓名</th>
+                                <th>联系方式</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 动态生成数据 -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 订单分页控件 -->
+
+                <!-- 退票须知和我要退票按钮 -->
+                <div class="refund-button-container">
+                    <div class="refund-notice">
+                        <strong>退票须知：</strong>
+                        提前在发车时间5个小时(不含)之前退票，免收手续费；提前在发车时间2-5个小时(含)退票，手续费收取10%;提前在发车时间30分钟-2个小时(不含)退票，手续费收取20%;提前在发车时间10分钟-30分钟(含)退票，手续费收取50%。
+                    </div>
+                    <button id="refund-button" class="refund-action-btn">我的出行</button>
+                </div>
+            </section>
+
+            <!-- 我的退票模块 -->
+            <section id="my-refunds" class="section">
+                <h1>我的退票</h1>
+                <div class="refund-tabs">
+                    <button class="tab-btn active" onclick="showRefundTab('pending')">待通过申请</button>
+                    <button class="tab-btn" onclick="showRefundTab('approved')">已通过申请</button>
+                    <button class="tab-btn" onclick="showRefundTab('rejected')">被拒绝申请</button>
+                </div>
+
+                <!-- 待通过申请列表 -->
+                <div id="pending-refunds" class="refund-list active">
+                    <div class="table-container">
+                        <table id="pending-refunds-table">
+                            <thead>
+                                <tr>
+                                    <th>订单号</th>
+                                    <th>车次</th>
+                                    <th>出发站</th>
+                                    <th>终点站</th>
+                                    <th>发车日期</th>
+                                    <th>发车时间</th>
+                                    <th>申请时间</th>
+                                    <th>退票原因</th>
+                                    <th>退款金额</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 动态生成数据 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 已通过申请列表 -->
+                <div id="approved-refunds" class="refund-list">
+                    <div class="table-container">
+                        <table id="approved-refunds-table">
+                            <thead>
+                                <tr>
+                                    <th>订单号</th>
+                                    <th>车次</th>
+                                    <th>出发站</th>
+                                    <th>终点站</th>
+                                    <th>发车日期</th>
+                                    <th>发车时间</th>
+                                    <th>申请时间</th>
+                                    <th>处理时间</th>
+                                    <th>退票原因</th>
+                                    <th>退款金额</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 动态生成数据 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 被拒绝申请列表 -->
+                <div id="rejected-refunds" class="refund-list">
+                    <div class="table-container">
+                        <table id="rejected-refunds-table">
+                            <thead>
+                                <tr>
+                                    <th>订单号</th>
+                                    <th>车次</th>
+                                    <th>出发站</th>
+                                    <th>终点站</th>
+                                    <th>发车日期</th>
+                                    <th>发车时间</th>
+                                    <th>申请时间</th>
+                                    <th>处理时间</th>
+                                    <th>退票原因</th>
+                                    <th>拒绝原因</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 动态生成数据 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- 退票分页控件 -->
+
+            </section>
+
+            <!-- 常用乘客模块 -->
+            <section id="frequent-passengers" class="section">
+                <h1>常用乘客</h1>
+                <div class="passenger-management">
+                    <div class="passenger-list">
+                        <h2>常用乘客列表</h2>
+                        <div class="table-container">
+                            <table id="passengers-table">
+                                <thead>
+                                    <tr>
+                                        <th>姓 名</th>
+                                        <th>身 份 证</th>
+                                        <th>联 系 方 式</th>
+                                        <th>操 作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- 动态生成数据 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="add-passenger-form">
+                        <h2>添加常用乘客</h2>
+                        <form id="add-passenger-form">
+                            <div class="form-group">
+                                <label for="passenger-name">姓 名：</label>
+                                <input type="text" id="passenger-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="passenger-idno">身 份 证：</label>
+                                <input type="text" id="passenger-idno" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="passenger-phone">联 系 方 式：</label>
+                                <input type="tel" id="passenger-phone" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit">添加乘客</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 修改密码模块 -->
+            <section id="change-password" class="section">
+                <h1>修改密码</h1>
+                <form id="password-form" class="password-form">
+                    <div class="form-group">
+                        <label for="old-password">原密码：</label>
+                        <div class="password-input-container">
+                            <input type="password" id="old-password" required>
+                            <button type="button" class="password-toggle"
+                                onclick="togglePassword('old-password')">👁️</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">新密码：</label>
+                        <div class="password-input-container">
+                            <input type="password" id="new-password" required>
+                            <button type="button" class="password-toggle"
+                                onclick="togglePassword('new-password')">👁️</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">确认新密码：</label>
+                        <div class="password-input-container">
+                            <input type="password" id="confirm-password" required>
+                            <button type="button" class="password-toggle"
+                                onclick="togglePassword('confirm-password')">👁️</button>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit">确认修改</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <!-- 自定义提示弹窗 -->
+    <div id="custom-popup" class="popup"></div>
+
+    <!-- 确认弹窗 -->
+    <div id="confirm-popup" class="confirm-popup">
+        <div class="confirm-content">
+            <p id="confirm-text"></p>
+            <div class="confirm-buttons">
+                <button id="confirm-ok">确定</button>
+                <button id="confirm-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 公告弹窗 -->
+    <div id="announcement-popup" class="confirm-popup">
+        <div class="confirm-content">
+            <div class="popup-header">
+                <div class="popup-title">
+                    <h3>通知</h3>
+                    <div class="announcement-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                    </div>
+                </div>
+                <span class="close-btn" id="announcement-close">&times;</span>
+            </div>
+            <p id="announcement-popup-text"></p>
+            <div class="confirm-buttons">
+                <button id="announcement-ok">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 退款原因选择弹窗 -->
+    <div id="refund-reason-popup" class="confirm-popup">
+        <div class="confirm-content">
+            <div class="popup-header">
+                <div class="popup-title">
+                    <h3>选择退票原因</h3>
+                </div>
+            </div>
+            <div class="refund-reason-content">
+                <div class="reason-options">
+                    <label class="reason-option">
+                        <input type="radio" name="refund-reason" value="行程有变" checked>
+                        <span>行程有变</span>
+                    </label>
+                    <label class="reason-option">
+                        <input type="radio" name="refund-reason" value="重复购票">
+                        <span>重复购票</span>
+                    </label>
+                    <label class="reason-option">
+                        <input type="radio" name="refund-reason" value="其他原因">
+                        <span>其他原因</span>
+                    </label>
+                </div>
+            </div>
+            <div class="confirm-buttons">
+                <button id="refund-reason-ok">确定退票</button>
+                <button id="refund-reason-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 退票规则确认弹窗 -->
+    <div id="refund-confirm-popup" class="confirm-popup">
+        <div class="confirm-content">
+            <div class="popup-header">
+                <div class="popup-title">
+                    <h3>退票确认</h3>
+                </div>
+            </div>
+            <div class="confirm-message-content">
+                <p id="refund-confirm-message"></p>
+            </div>
+            <div class="confirm-buttons">
+                <button id="refund-confirm-ok">确定</button>
+                <button id="refund-confirm-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 自定义通知弹窗 -->
+    <div id="custom-popup" class="popup"></div>
+
+    <!-- 拒绝理由详情弹窗 -->
+    <div id="reject-reason-popup" class="confirm-popup">
+        <div class="confirm-content">
+            <div class="popup-header">
+                <div class="popup-title">
+                    <h3>拒绝理由</h3>
+                    <div class="reject-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="closeRejectReasonPopup()">×</button>
+            </div>
+            <p id="reject-reason-text"></p>
+            <div class="confirm-buttons">
+                <button id="reject-reason-ok" onclick="closeRejectReasonPopup()">知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/user.js"></script>
+</body>
+
+</html>

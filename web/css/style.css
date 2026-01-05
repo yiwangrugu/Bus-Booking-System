@@ -1,0 +1,286 @@
+/* 登录容器 */
+.login-container {
+    width: fit-content;
+    padding: 30px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0 auto;
+}
+
+.login-box,
+.register-box {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    width: 500px;
+}
+
+.login-box::before,
+.register-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, #667eea, #764ba2, #4facfe, #00f2fe, #667eea);
+    animation: rotate 10s linear infinite;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.login-box:hover,
+.register-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.login-box h1,
+.register-box h1 {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4facfe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    padding-bottom: 12px;
+}
+
+.login-box h1::after,
+.register-box h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #667eea, transparent);
+    border-radius: 2px;
+}
+
+/* 输入组 */
+.input-group {
+    margin-bottom: 30px;
+    text-align: left;
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: #555;
+    font-family: '楷书', Arial, sans-serif;
+    font-size: 17px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    padding-left: 5px;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid rgba(102, 126, 234, 0.4);
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: '楷书', Arial, sans-serif;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15), 0 6px 20px rgba(102, 126, 234, 0.2);
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-3px);
+}
+
+/* 按钮组 */
+.button-group {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.login-btn,
+.register-btn,
+.back-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: '楷书', Arial, sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
+}
+
+.login-btn::before,
+.register-btn::before,
+.back-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.login-btn:hover::before,
+.register-btn:hover::before,
+.back-btn:hover::before {
+    left: 100%;
+}
+
+.login-btn::after,
+.register-btn::after,
+.back-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: all 0.4s ease;
+    transform: translate(-50%, -50%);
+}
+
+.login-btn:hover::after,
+.register-btn:hover::after,
+.back-btn:hover::after {
+    width: 300px;
+    height: 300px;
+}
+
+.login-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.login-btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.register-btn {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+}
+
+.register-btn:hover {
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+}
+
+.back-btn {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3);
+}
+
+.back-btn:hover {
+    background: linear-gradient(135deg, #fee140 0%, #fa709a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(250, 112, 154, 0.4);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .login-container {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .login-box,
+    .register-box {
+        padding: 40px 30px;
+        margin: 0 10px;
+        max-width: 100%;
+    }
+
+    .login-box h1,
+    .register-box h1 {
+        font-size: 26px;
+        margin-bottom: 25px;
+    }
+
+    .input-group input,
+    .input-group select {
+        padding: 12px 14px;
+        font-size: 15px;
+    }
+
+    .login-btn,
+    .register-btn,
+    .back-btn {
+        padding: 12px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .login-box,
+    .register-box {
+        padding: 30px 20px;
+        border-radius: 15px;
+    }
+
+    .login-box h1,
+    .register-box h1 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .input-group {
+        margin-bottom: 18px;
+    }
+
+    .input-group label {
+        font-size: 14px;
+    }
+
+    .button-group {
+        margin-top: 30px;
+        gap: 12px;
+    }
+}

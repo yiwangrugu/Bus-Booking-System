@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巴士订票系统 - 注册</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="register-box">
+            <h1>巴士订票管理系统</h1>
+            <form id="registerForm">
+                <div class="input-group">
+                    <label for="username">账 号:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">密 码:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" name="password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('password')">👁️</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword">确 认 密 码:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        <button type="button" class="password-toggle"
+                            onclick="togglePassword('confirmPassword')">👁️</button>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="login-btn">注 册</button>
+                    <button type="button" class="back-btn" onclick="window.location.href='login.html'">返回登录</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 自定义提示弹窗 -->
+    <div id="custom-popup" class="popup"></div>
+
+    <script src="js/common.js"></script>
+    <script src="js/register.js"></script>
+</body>
+
+</html>
