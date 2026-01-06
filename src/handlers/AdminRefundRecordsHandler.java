@@ -43,7 +43,6 @@ public class AdminRefundRecordsHandler extends BaseHandler {
                     record.put("btno", rs.getInt("btno"));
                     record.put("bno", rs.getInt("bno"));
                     record.put("idno", rs.getString("idno"));
-                    record.put("sno", rs.getInt("sno"));
                     record.put("apply_date", rs.getDate("apply_date").toString());
                     record.put("apply_time", rs.getTime("apply_time").toString());
                     record.put("refund_reason", rs.getString("refund_reason"));
@@ -61,8 +60,7 @@ public class AdminRefundRecordsHandler extends BaseHandler {
                     record.put("passengerPhone", rs.getString("tel") != null ? rs.getString("tel") : "");
 
                     if (rs.getTimestamp("process_time") != null) {
-                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        record.put("process_time", sdf.format(rs.getTimestamp("process_time")));
+                        record.put("process_time", rs.getTimestamp("process_time").toString());
                     }
                     record.put("reject_reason", rs.getString("reject_reason"));
 

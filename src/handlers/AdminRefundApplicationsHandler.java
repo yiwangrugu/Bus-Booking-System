@@ -41,7 +41,6 @@ public class AdminRefundApplicationsHandler extends BaseHandler {
                     refund.put("btno", rs.getInt("btno"));
                     refund.put("bno", rs.getInt("bno"));
                     refund.put("idno", rs.getString("idno"));
-                    refund.put("sno", rs.getInt("sno"));
                     refund.put("apply_date", rs.getDate("apply_date").toString());
                     refund.put("apply_time", rs.getTime("apply_time").toString());
                     refund.put("refund_reason", rs.getString("refund_reason"));

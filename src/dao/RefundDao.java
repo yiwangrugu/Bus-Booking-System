@@ -8,18 +8,15 @@ import java.sql.ResultSet;
 public class RefundDao {
     public RefundTicket addRefund(Connection con, RefundTicket rt) throws Exception {
         RefundTicket refundTicket = null;
-        String sql = "insert into refund_ticket(bno,btno,idno,sno,rdate,rtime,staName,endName,date,time) values(?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into refund_ticket(bno,btno,idno,rdate,rtime,staName,endName,date,time) values(?,?,?,?,CURDATE(),CURTIME(),?,?,?)";
         java.sql.PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, rt.getBno());
         ps.setInt(2, rt.getBtno());
         ps.setString(3, rt.getIdno());
-        ps.setInt(4, rt.getSno());
-        ps.setDate(5, new java.sql.Date(rt.getRdate().getTime()));
-        ps.setTime(6, rt.getRtime());
-        ps.setString(7, rt.getStaName());
-        ps.setString(8, rt.getEndName());
-        ps.setDate(9, rt.getDate());
-        ps.setTime(10, rt.getTime());
+        ps.setString(4, rt.getStaName());
+        ps.setString(5, rt.getEndName());
+        ps.setDate(6, rt.getDate());
+        ps.setTime(7, rt.getTime());
         int result = ps.executeUpdate();
         ps.close();
         if (result > 0) {

@@ -23,7 +23,7 @@ public class StaticFileHandler implements HttpHandler {
         }
 
         if (path.equals("/")) {
-            exchange.getResponseHeaders().set("Location", "/login.html");
+            exchange.getResponseHeaders().set("Location", "/html/login.html");
             exchange.sendResponseHeaders(302, -1);
             return;
         }

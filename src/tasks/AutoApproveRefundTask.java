@@ -29,7 +29,6 @@ public class AutoApproveRefundTask implements Runnable {
                 int btno = rs.getInt("btno");
                 int bno = rs.getInt("bno");
                 String idno = rs.getString("idno");
-                int sno = rs.getInt("sno");
                 String applyDate = rs.getString("apply_date");
                 String applyTime = rs.getString("apply_time");
 
@@ -63,9 +62,6 @@ public class AutoApproveRefundTask implements Runnable {
                         refundTicket.setBtno(btno);
                         refundTicket.setBno(bno);
                         refundTicket.setIdno(idno);
-                        refundTicket.setSno(sno);
-                        refundTicket.setRdate(new java.sql.Date(System.currentTimeMillis()));
-                        refundTicket.setRtime(new java.sql.Time(System.currentTimeMillis()));
                         refundTicket.setStaName(staName);
                         refundTicket.setEndName(endName);
                         refundTicket.setDate(date);

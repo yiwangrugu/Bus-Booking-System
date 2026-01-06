@@ -33,7 +33,7 @@ public class RejectRefundApplicationHandler extends BaseHandler {
                 rs.close();
                 getUserPstmt.close();
 
-                String sql = "UPDATE refund_application SET status = 'rejected', process_time = NOW(), reject_reason = ?, processed_by = '手动审批' WHERE btno = ? AND status = 'pending'";
+                String sql = "UPDATE refund_application SET status = \"rejected\", process_time = NOW(), reject_reason = ?, processed_by = \"手动审批\" WHERE btno = ? AND status = \"pending\"";
                 PreparedStatement pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, rejectReason);
                 pstmt.setInt(2, btno);

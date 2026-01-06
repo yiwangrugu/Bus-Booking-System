@@ -43,7 +43,6 @@ public class ApproveRefundApplicationHandler extends BaseHandler {
 
                     int bno = rs.getInt("bno");
                     String idno = rs.getString("idno");
-                    int sno = rs.getInt("sno");
                     String status = rs.getString("status");
                     rs.close();
                     getRefundPstmt.close();
@@ -85,16 +84,13 @@ public class ApproveRefundApplicationHandler extends BaseHandler {
                         refundTicket.setBtno(btno);
                         refundTicket.setBno(bno);
                         refundTicket.setIdno(idno);
-                        refundTicket.setSno(sno);
-                        refundTicket.setRdate(new java.sql.Date(System.currentTimeMillis()));
-                        refundTicket.setRtime(new java.sql.Time(System.currentTimeMillis()));
                         refundTicket.setStaName(staName);
                         refundTicket.setEndName(endName);
                         refundTicket.setDate(date);
                         refundTicket.setTime(time);
                         refundDao.addRefund(connection, refundTicket);
 
-                        String sql = "UPDATE refund_application SET status = 'approved', process_time = NOW(), processed_by = '手动审批' WHERE btno = ?";
+                        String sql = "UPDATE refund_application SET status = \"approved\", process_time = NOW(), processed_by = \"手动审批\" WHERE btno = ?";
                         PreparedStatement pstmt = connection.prepareStatement(sql);
                         pstmt.setInt(1, btno);
 

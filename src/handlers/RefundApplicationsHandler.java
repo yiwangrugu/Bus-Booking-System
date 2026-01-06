@@ -70,7 +70,6 @@ public class RefundApplicationsHandler extends BaseHandler {
                 refund.put("btno", rs.getInt("btno"));
                 refund.put("bno", rs.getInt("bno"));
                 refund.put("idno", rs.getString("idno"));
-                refund.put("sno", rs.getInt("sno"));
                 refund.put("apply_date", rs.getDate("apply_date").toString());
                 refund.put("apply_time", rs.getTime("apply_time").toString());
                 refund.put("refund_reason", rs.getString("refund_reason"));
@@ -85,8 +84,7 @@ public class RefundApplicationsHandler extends BaseHandler {
                 refund.put("price", rs.getFloat("price"));
 
                 if (rs.getTimestamp("process_time") != null) {
-                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    refund.put("process_time", sdf.format(rs.getTimestamp("process_time")));
+                    refund.put("process_time", rs.getTimestamp("process_time").toString());
                 }
                 if (rs.getString("processed_by") != null) {
                     refund.put("processed_by", rs.getString("processed_by"));

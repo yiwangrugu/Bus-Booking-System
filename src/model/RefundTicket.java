@@ -7,7 +7,6 @@ public class RefundTicket {
     private int btno;
     private int bno;
     private String idno;
-    private int sno;
     private Date rdate;
     private Time rtime;
     private String staName;
@@ -37,14 +36,6 @@ public class RefundTicket {
 
     public void setIdno(String idno) {
         this.idno = idno;
-    }
-
-    public int getSno() {
-        return sno;
-    }
-
-    public void setSno(int sno) {
-        this.sno = sno;
     }
 
     public Date getRdate() {
@@ -98,19 +89,17 @@ public class RefundTicket {
     public RefundTicket() {
     }
 
-    public RefundTicket(int bno, String idno, int sno, Date rdate, Time rtime) {
+    public RefundTicket(int bno, String idno, Date rdate, Time rtime) {
         this.bno = bno;
         this.idno = idno;
-        this.sno = sno;
         this.rdate = rdate;
         this.rtime = rtime;
     }
 
-    public RefundTicket(int bno, int btno, String idno, int sno, Date rdate, Time rtime) {
+    public RefundTicket(int bno, int btno, String idno, Date rdate, Time rtime) {
         this.bno = bno;
         this.btno = btno;
         this.idno = idno;
-        this.sno = sno;
         this.rdate = rdate;
         this.rtime = rtime;
     }
