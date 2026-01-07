@@ -20,7 +20,12 @@ public class PublishAnnouncementHandler extends BaseHandler {
 
                 connection = getConnection();
 
-                String sql = "INSERT INTO announcements (content, announcement_date, publish_time) VALUES (?, ?, NOW())";
+                String updateSql = "UPDATE announcements SET published = 0 WHERE id = (SELECT id FROM (SELECT MAX(id) AS id FROM announcements) AS tmp)";
+                PreparedStatement updateStmt = connection.prepareStatement(updateSql);
+                updateStmt.executeUpdate();
+                updateStmt.close();
+
+                String sql = "INSERT INTO announcements (content, announcement_date, publish_time, published) VALUES (?, ?, NOW(), 1)";
                 PreparedStatement pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, content);
                 pstmt.setString(2, announcementDate);

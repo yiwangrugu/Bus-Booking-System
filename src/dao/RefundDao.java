@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 public class RefundDao {
     public RefundTicket addRefund(Connection con, RefundTicket rt) throws Exception {
         RefundTicket refundTicket = null;
-        String sql = "insert into refund_ticket(bno,btno,idno,rdate,rtime,staName,endName,date,time) values(?,?,?,?,CURDATE(),CURTIME(),?,?,?)";
+        String sql = "insert into refund_ticket(bno,btno,idno,rdate,rtime,staName,endName,date,time) values(?,?,?,CURDATE(),CURTIME(),?,?,?,?)";
         java.sql.PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, rt.getBno());
         ps.setInt(2, rt.getBtno());

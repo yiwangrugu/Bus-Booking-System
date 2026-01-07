@@ -19,7 +19,7 @@
 - 车次管理（增删改查）
 - 订单管理
 - 退票申请审批（手动/自动）
-- 发布公告
+- 公告管理（发布、取消、重新发布）
 - 查看处理记录
 - 修改密码
 
@@ -36,7 +36,7 @@
 - Java 11+
 - Java HttpServer
 - JDBC
-- SQLite 数据库
+- MySQL 数据库
 - 线程池管理
 - 定时任务
 
@@ -81,6 +81,7 @@ BookingSystem/
 │   │   ├── AnnouncementRecordsHandler.java       # 公告记录
 │   │   ├── PublishAnnouncementHandler.java        # 发布公告
 │   │   ├── CancelAnnouncementHandler.java        # 取消公告
+│   │   ├── RepublishAnnouncementHandler.java    # 重新发布公告
 │   │   ├── ChangePasswordHandler.java            # 修改密码
 │   │   └── StaticFileHandler.java                # 静态文件处理
 │   ├── model/
@@ -111,16 +112,15 @@ BookingSystem/
 │   └── images/
 │       └── 系统背景.png             # 背景图片
 ├── lib/                             # 依赖库
-│   └── sqlite-jdbc-3.36.0.3.jar    # SQLite JDBC 驱动
-└── META-INF/
-    └── MANIFEST.MF                  # 清单文件
+│   └── mysql-connector-j-8.0.33.jar    # MySQL JDBC 驱动
+└── .gitignore                        # Git 忽略文件
 ```
 
 ## 安装和运行
 
 ### 环境要求
 - Java 11 或更高版本
-- SQLite 3
+- MySQL 5.7 或更高版本
 
 ### 安装步骤
 
@@ -130,17 +130,22 @@ git clone https://github.com/yiwangrugu/Bus-Booking-System.git
 cd Bus-Booking-System
 ```
 
-2. 编译项目
+2. 配置数据库
+- 创建数据库：`booksystem`
+- 导入数据库表结构（参考下面的数据库结构部分）
+- 修改 `DbPool.java` 中的数据库连接信息（用户名、密码等）
+
+3. 编译项目
 ```bash
-javac -cp lib/sqlite-jdbc-3.36.0.3.jar -d out src/**/*.java
+javac -cp lib/mysql-connector-j-8.0.33.jar -d out src/**/*.java
 ```
 
-3. 运行服务器
+4. 运行服务器
 ```bash
-java -cp out;lib/sqlite-jdbc-3.36.0.3.jar Main.WebServer
+java -cp out;lib/mysql-connector-j-8.0.33.jar Main.WebServer
 ```
 
-4. 访问系统
+5. 访问系统
 - 用户端：http://localhost:8080/login.html
 - 管理员端：http://localhost:8080/admin.html
 
@@ -228,9 +233,22 @@ CREATE TABLE passengers (
 CREATE TABLE announcements (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT NOT NULL,
-    publishTime TEXT NOT NULL,
-    expiryTime TEXT NOT NULL
+    announcement_date DATE NOT NULL,
+    publish_time DATETIME NOT NULL,
+    published BOOLEAN DEFAULT 0
 );
+```
+
+### 数据库迁移
+
+如果需要添加 `published` 字段到现有的 `announcements` 表，可以执行以下 SQL：
+
+```sql
+-- 添加published字段到announcements表
+ALTER TABLE announcements ADD COLUMN published BOOLEAN DEFAULT 0;
+
+-- 更新现有记录的published状态
+UPDATE announcements SET published = 1 WHERE content IS NOT NULL AND content != '';
 ```
 
 ## 退票规则
@@ -269,7 +287,8 @@ CREATE TABLE announcements (
 - `POST /api/admin/reject-refund` - 拒绝退票
 - `GET /api/admin/refund-records` - 获取退票记录
 - `POST /api/admin/publish-announcement` - 发布公告
-- `DELETE /api/admin/cancel-announcement` - 取消公告
+- `POST /api/admin/cancel-announcement` - 取消公告
+- `POST /api/admin/republish-announcement` - 重新发布公告
 - `GET /api/admin/announcement-records` - 获取公告记录
 - `POST /api/change-password` - 修改密码
 

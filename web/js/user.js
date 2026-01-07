@@ -21,6 +21,9 @@ function startPolling() {
 
     // 每 5 秒轮询一次
     pollingTimer = setInterval(() => {
+        // 检查公告状态
+        loadAnnouncement();
+
         // 根据搜索状态决定如何获取车次数据
         if (isSearchActive) {
             // 如果有搜索状态，使用保存的搜索参数
@@ -94,8 +97,8 @@ window.addEventListener('load', function () {
     loadPassengers();
     loadMyRefunds(); // 加载我的退票申请
 
-    // 加载今日公告
-    loadAnnouncement();
+    // 加载今日公告（页面加载时显示弹窗）
+    loadAnnouncement(true);
 
     // 启动轮询，每5秒自动刷新数据
     startPolling();
@@ -868,8 +871,12 @@ function refundAction() {
 
 // 公告功能
 // 加载今日公告
-function loadAnnouncement() {
-    const today = new Date().toISOString().split('T')[0];
+function loadAnnouncement(showPopup = false) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const today = `${year}-${month}-${day}`;
 
     // 首先从服务器获取最新公告
     fetch(`/api/announcement-records?date=${today}`)
@@ -884,21 +891,31 @@ function loadAnnouncement() {
 
             // 检查是否有今天的公告
             if (records && records.length > 0) {
-                // 获取最新的一条公告
-                const latestAnnouncement = records[0];
+                let hasPublishedAnnouncement = false;
+                let latestContent = '';
 
-                // 检查公告内容是否为空
-                if (latestAnnouncement.content && latestAnnouncement.content.trim() !== '') {
+                // 检查所有公告记录，找到已发布的公告
+                for (let i = 0; i < records.length; i++) {
+                    const record = records[i];
+                    if (record.published && record.content && record.content.trim() !== '') {
+                        hasPublishedAnnouncement = true;
+                        latestContent = record.content;
+                        break;
+                    }
+                }
+
+                // 如果有已发布的公告，显示它
+                if (hasPublishedAnnouncement) {
                     announcementData = {
                         date: today,
-                        content: latestAnnouncement.content,
+                        content: latestContent,
                         published: true
                     };
 
                     // 保存到localStorage
                     localStorage.setItem('dailyAnnouncement', JSON.stringify(announcementData));
                 } else {
-                    // 公告内容为空，清除localStorage中的公告
+                    // 没有已发布的公告，清除localStorage中的公告
                     localStorage.removeItem('dailyAnnouncement');
                 }
             } else {
@@ -907,7 +924,7 @@ function loadAnnouncement() {
             }
 
             // 显示公告
-            displayAnnouncement(announcementData);
+            displayAnnouncement(announcementData, showPopup);
         })
         .catch(error => {
             console.error('获取公告时出错:', error);
@@ -925,34 +942,37 @@ function loadAnnouncement() {
             }
 
             // 显示公告
-            displayAnnouncement(announcementData);
+            displayAnnouncement(announcementData, showPopup);
         });
 }
 
 // 显示公告的辅助函数
-function displayAnnouncement(data) {
+function displayAnnouncement(data, showPopup = false) {
     const banner = document.getElementById('announcement-banner');
     const marquee = document.getElementById('announcement-marquee');
     const marqueeCopy = document.getElementById('announcement-marquee-copy');
-    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const today = `${year}-${month}-${day}`;
 
-    if (!data || data.date !== today || typeof data.content !== 'string' || data.content.trim() === '' || !data.published) {
-        // 非今天的公告、公告内容为空或公告未发布，隐藏横幅
+    // 如果没有公告数据，隐藏横幅
+    if (!data || typeof data.content !== 'string' || data.content.trim() === '') {
         if (banner) banner.style.display = 'none';
         return;
     }
 
-    // 显示公告横幅
+    // 显示横幅
     if (banner) {
         banner.style.display = 'block';
     }
 
-    // 更新滚动文本和复制文本
     if (marquee) marquee.textContent = data.content;
     if (marqueeCopy) marqueeCopy.textContent = data.content;
 
-    // 只有当公告内容不为空时才显示弹窗
-    if (data.content.trim() !== '') {
+    // 只在showPopup为true时显示公告弹窗（页面加载时）
+    if (showPopup && data.content.trim() !== '') {
         showAnnouncementPopup(data.content);
     }
 }
@@ -992,6 +1012,12 @@ function showAnnouncementPopup(content = null) {
     announcementPopup.style.opacity = '1';
     announcementPopup.style.zIndex = '1001';
 
+    // 克隆节点以移除所有旧的事件监听器
+    const newBtn = announcementBtn.cloneNode(true);
+    const newCloseBtn = announcementCloseBtn.cloneNode(true);
+    announcementBtn.parentNode.replaceChild(newBtn, announcementBtn);
+    announcementCloseBtn.parentNode.replaceChild(newCloseBtn, announcementCloseBtn);
+
     // 设置关闭按钮事件
     const closePopup = () => {
         // 直接隐藏弹窗
@@ -1001,8 +1027,8 @@ function showAnnouncementPopup(content = null) {
     };
 
     // 绑定事件
-    announcementBtn.addEventListener('click', closePopup);
-    announcementCloseBtn.addEventListener('click', closePopup);
+    newBtn.addEventListener('click', closePopup);
+    newCloseBtn.addEventListener('click', closePopup);
 }
 
 // 我的退票模块功能

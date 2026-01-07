@@ -15,7 +15,7 @@ public class WebServer {
     public static void main(String[] args) {
         try {
             HttpServer server = HttpServer.create(new java.net.InetSocketAddress("0.0.0.0", 8080), 0);
-            server.setExecutor(Executors.newFixedThreadPool(200));
+            server.setExecutor(Executors.newFixedThreadPool(1000));
 
             server.createContext("/api/login", new LoginHandler());
             server.createContext("/api/register", new RegisterHandler());
@@ -29,6 +29,7 @@ public class WebServer {
             server.createContext("/api/announcement-records", new AnnouncementRecordsHandler());
             server.createContext("/api/publish-announcement", new PublishAnnouncementHandler());
             server.createContext("/api/cancel-announcement", new CancelAnnouncementHandler());
+            server.createContext("/api/republish-announcement", new RepublishAnnouncementHandler());
             server.createContext("/api/orders/refund-application", new RefundApplicationHandler());
             server.createContext("/api/refund-applications", new RefundApplicationsHandler());
             server.createContext("/api/admin/refund-applications", new AdminRefundApplicationsHandler());
@@ -50,13 +51,19 @@ public class WebServer {
             server.start();
             System.out.println("服务器启动成功，监听端口：" + PORT);
             System.out.println("访问地址：http://localhost:" + PORT);
+            System.out.println("最大并发连接数：1000");
 
             ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
             scheduler.scheduleAtFixedRate(new AutoApproveRefundTask(), 0, 30, TimeUnit.MINUTES);
 
             java.time.LocalDateTime now = java.time.LocalDateTime.now();
-            java.time.LocalDateTime nextMidnight = now.with(java.time.LocalTime.MIDNIGHT).plusDays(1);
+            java.time.LocalDateTime nextMidnight = now.toLocalDate().atTime(0, 0);
+
+            if (now.isAfter(nextMidnight)) {
+                nextMidnight = nextMidnight.plusDays(1);
+            }
+
             long initialDelay = java.time.Duration.between(now, nextMidnight).toMillis();
 
             scheduler.scheduleAtFixedRate(new ClearAnnouncementTask(), initialDelay, 24 * 60 * 60 * 1000,

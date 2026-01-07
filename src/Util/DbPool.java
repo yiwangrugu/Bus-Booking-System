@@ -7,8 +7,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class DbPool {
-    private static final int MAX_POOL_SIZE = 100;
-    private static final int MIN_IDLE = 10;
+    private static final int MAX_POOL_SIZE = 500;
+    private static final int MIN_IDLE = 50;
     private static final int MAX_WAIT_TIME = 30000;
 
     private static BlockingQueue<Connection> connectionPool;

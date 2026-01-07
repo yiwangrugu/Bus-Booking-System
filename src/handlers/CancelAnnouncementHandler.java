@@ -20,50 +20,21 @@ public class CancelAnnouncementHandler extends BaseHandler {
 
                 connection = getConnection();
 
-                String checkSql = "SELECT id FROM announcements WHERE announcement_date = ?";
-                PreparedStatement checkStmt = connection.prepareStatement(checkSql);
-                checkStmt.setString(1, announcementDate);
-                ResultSet rs = checkStmt.executeQuery();
+                String updateSql = "UPDATE announcements SET published = 0 WHERE id = (SELECT id FROM (SELECT MAX(id) AS id FROM announcements) AS tmp)";
+                PreparedStatement updateStmt = connection.prepareStatement(updateSql);
+                int rowsAffected = updateStmt.executeUpdate();
+                updateStmt.close();
 
-                if (rs.next()) {
-                    int id = rs.getInt("id");
-                    String updateSql = "UPDATE announcements SET content = '', publish_time = NOW() WHERE id = ?";
-                    PreparedStatement updateStmt = connection.prepareStatement(updateSql);
-                    updateStmt.setInt(1, id);
-                    int rowsAffected = updateStmt.executeUpdate();
-                    updateStmt.close();
-
-                    JSONObject responseJson = new JSONObject();
-                    if (rowsAffected > 0) {
-                        responseJson.put("success", true);
-                        responseJson.put("message", "公告已取消");
-                        sendResponse(exchange, 200, responseJson.toString());
-                    } else {
-                        responseJson.put("success", false);
-                        responseJson.put("message", "取消公告失败");
-                        sendResponse(exchange, 500, responseJson.toString());
-                    }
+                JSONObject responseJson = new JSONObject();
+                if (rowsAffected > 0) {
+                    responseJson.put("success", true);
+                    responseJson.put("message", "公告已取消");
+                    sendResponse(exchange, 200, responseJson.toString());
                 } else {
-                    String insertSql = "INSERT INTO announcements (content, announcement_date, publish_time) VALUES ('', ?, NOW())";
-                    PreparedStatement insertStmt = connection.prepareStatement(insertSql);
-                    insertStmt.setString(1, announcementDate);
-                    int rowsAffected = insertStmt.executeUpdate();
-                    insertStmt.close();
-
-                    JSONObject responseJson = new JSONObject();
-                    if (rowsAffected > 0) {
-                        responseJson.put("success", true);
-                        responseJson.put("message", "公告已取消");
-                        sendResponse(exchange, 200, responseJson.toString());
-                    } else {
-                        responseJson.put("success", false);
-                        responseJson.put("message", "取消公告失败");
-                        sendResponse(exchange, 500, responseJson.toString());
-                    }
+                    responseJson.put("success", false);
+                    responseJson.put("message", "取消公告失败");
+                    sendResponse(exchange, 500, responseJson.toString());
                 }
-
-                rs.close();
-                checkStmt.close();
             } catch (Exception e) {
                 e.printStackTrace();
                 JSONObject errorResponse = createErrorResponse("服务器内部错误: " + e.getMessage());

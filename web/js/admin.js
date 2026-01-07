@@ -22,6 +22,21 @@ function startAdminPolling() {
     }, 5000);
 }
 
+// 公告状态检查定时器
+let announcementCheckTimer = null;
+
+// 启动公告状态检查
+function startAnnouncementCheck() {
+    if (announcementCheckTimer) {
+        clearInterval(announcementCheckTimer);
+    }
+
+    // 每 10 秒检查一次公告状态
+    announcementCheckTimer = setInterval(() => {
+        loadAnnouncement();
+    }, 10000);
+}
+
 // 停止轮询
 function stopAdminPolling() {
     if (adminPollingTimer) {
@@ -131,6 +146,9 @@ window.addEventListener('load', function () {
     // 启动轮询，每5秒自动刷新待处理退票
     startAdminPolling();
 
+    // 启动公告状态检查
+    startAnnouncementCheck();
+
     // 加载车次列表
     loadBusList();
 
@@ -204,6 +222,19 @@ function showSection(sectionId) {
     const selectedSection = document.getElementById(sectionId);
     selectedSection.classList.add('active');
 
+    // 根据模块ID激活对应的下拉菜单按钮
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        const dropdownItems = dropdown.querySelectorAll('.dropdown-item');
+        dropdownItems.forEach(item => {
+            const onclickValue = item.getAttribute('onclick');
+            if (onclickValue && onclickValue.includes(sectionId)) {
+                const dropdownBtn = dropdown.querySelector('.dropdown-btn');
+                dropdownBtn.classList.add('active');
+            }
+        });
+    });
+
     // 如果是车次列表模块，根据搜索状态决定如何加载数据
     if (sectionId === 'bus-list') {
         if (isSearchActive) {
@@ -220,8 +251,8 @@ function showSection(sectionId) {
         // 如果是退订列表模块，重新加载数据
         loadRefundList();
     } else if (sectionId === 'daily-announcement') {
-        // 如果是今日公告模块，加载已保存的公告
-        loadAnnouncement();
+        // 如果是今日公告模块，更新今日公告预览
+        updatePreview();
     } else if (sectionId === 'announcement-records') {
         // 如果是公告记录模块，加载公告记录
         loadAnnouncementRecords();
@@ -1039,7 +1070,7 @@ function loadAnnouncementRecords(searchDate = '') {
 
             if (data.length === 0) {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="4" style="text-align: center; color: #999; padding: 20px;">暂无公告记录数据</td>`;
+                row.innerHTML = `<td colspan="5" style="text-align: center; color: #999; padding: 20px;">暂无公告记录数据</td>`;
                 recordsTable.appendChild(row);
                 return;
             }
@@ -1055,11 +1086,15 @@ function loadAnnouncementRecords(searchDate = '') {
                 // 使用从1开始的顺序编号
                 const sequenceNumber = index + 1;
 
+                // 显示发布状态
+                const publishedStatus = record.published ? '<span style="color: green;">已发布</span>' : '<span style="color: red;">已结束</span>';
+
                 row.innerHTML = `
                     <td>${sequenceNumber}</td>
                     <td>${record.announcement_date}</td>
                     <td>${publishTime}</td>
-                    <td><button class="view-details-btn" onclick="viewAnnouncementDetails(${record.id}, '${record.content.replace(/'/g, "\\'")}')">详细信息</button></td>
+                    <td>${publishedStatus}</td>
+                    <td><button class="view-details-btn" onclick="viewAnnouncementDetails(${record.id}, '${record.content.replace(/'/g, "\\'")}', ${record.published})">详细信息</button></td>
                 `;
                 recordsTable.appendChild(row);
             });
@@ -1074,12 +1109,14 @@ function loadAnnouncementRecords(searchDate = '') {
 function searchAnnouncementRecords() {
     const searchDate = document.getElementById('records-search-date').value;
     loadAnnouncementRecords(searchDate);
+    loadAnnouncement();
 }
 
 // 清空搜索条件
 function clearRecordsSearch() {
     document.getElementById('records-search-date').value = '';
     loadAnnouncementRecords();
+    loadAnnouncement();
 }
 
 // 格式化发布时间，只显示到秒
@@ -1098,17 +1135,11 @@ function formatPublishTime(publishTime) {
 }
 
 // 查看公告详细信息
-function viewAnnouncementDetails(id, content) {
+function viewAnnouncementDetails(id, content, published) {
     const confirmPopup = document.getElementById('confirm-popup');
     const confirmText = document.getElementById('confirm-text');
     const confirmBtn = document.getElementById('confirm-ok');
     const cancelBtn = document.getElementById('confirm-cancel');
-
-    // 保存按钮原始样式
-    const originalBtnText = confirmBtn.textContent;
-    const originalBtnBackground = confirmBtn.style.background;
-    const originalBtnColor = confirmBtn.style.color;
-    const originalCancelDisplay = cancelBtn.style.display;
 
     confirmText.innerHTML = `
                 <div style="text-align: left; max-width: 500px;">
@@ -1141,35 +1172,92 @@ function viewAnnouncementDetails(id, content) {
         </div>
     `;
 
-    confirmBtn.textContent = '关闭';
-    confirmBtn.style.background = '#00bcd4';
+    if (published) {
+        confirmBtn.textContent = '取消发布';
+        confirmBtn.style.background = '#f44336';
+    } else {
+        confirmBtn.textContent = '再次发布';
+        confirmBtn.style.background = '#4CAF50';
+    }
     confirmBtn.style.color = 'white';
     confirmBtn.style.border = 'none';
     confirmBtn.style.padding = '10px 24px';
     confirmBtn.style.borderRadius = '20px';
     confirmBtn.style.cursor = 'pointer';
-    confirmBtn.style.fontSize = '14px';
-    confirmBtn.style.fontWeight = '500';
-    confirmBtn.style.transition = 'all 0.3s ease';
+    confirmBtn.style.marginRight = '10px';
 
-    cancelBtn.style.display = 'none';
+    cancelBtn.textContent = '关闭';
+    cancelBtn.style.background = '#00bcd4';
+    cancelBtn.style.color = 'white';
+    cancelBtn.style.border = 'none';
+    cancelBtn.style.padding = '10px 24px';
+    cancelBtn.style.borderRadius = '20px';
+    cancelBtn.style.cursor = 'pointer';
+    cancelBtn.style.display = 'inline-block';
 
     confirmPopup.style.display = 'flex';
 
     confirmBtn.onclick = () => {
+        if (published) {
+            cancelAnnouncement();
+        } else {
+            republishAnnouncement(id);
+        }
+    };
+
+    cancelBtn.onclick = () => {
         confirmPopup.style.display = 'none';
-        // 恢复按钮原始样式
-        confirmBtn.textContent = originalBtnText;
-        confirmBtn.style.background = originalBtnBackground;
-        confirmBtn.style.color = originalBtnColor;
-        confirmBtn.style.border = '';
-        confirmBtn.style.padding = '';
-        confirmBtn.style.borderRadius = '';
-        confirmBtn.style.fontSize = '';
-        confirmBtn.style.fontWeight = '';
-        cancelBtn.style.display = originalCancelDisplay;
     };
 }
+
+// 再次发布公告
+function republishAnnouncement(id) {
+    fetch('/api/republish-announcement', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: id
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('公告重新发布成功！');
+                document.getElementById('confirm-popup').style.display = 'none';
+                updatePreview();
+                loadAnnouncementRecords();
+            } else {
+                showNotification('重新发布公告失败：' + data.message, false);
+            }
+        })
+        .catch(error => {
+            console.error('重新发布公告失败:', error);
+            showNotification('重新发布公告失败，请稍后重试！', false);
+        });
+}
+confirmBtn.style.fontSize = '14px';
+confirmBtn.style.fontWeight = '500';
+confirmBtn.style.transition = 'all 0.3s ease';
+
+cancelBtn.style.display = 'none';
+
+confirmPopup.style.display = 'flex';
+
+confirmBtn.onclick = () => {
+    confirmPopup.style.display = 'none';
+    // 恢复按钮原始样式
+    confirmBtn.textContent = originalBtnText;
+    confirmBtn.style.background = originalBtnBackground;
+    confirmBtn.style.color = originalBtnColor;
+    confirmBtn.style.border = '';
+    confirmBtn.style.padding = '';
+    confirmBtn.style.borderRadius = '';
+    confirmBtn.style.fontSize = '';
+    confirmBtn.style.fontWeight = '';
+    cancelBtn.style.display = originalCancelDisplay;
+};
 
 // 修改密码
 function changePassword(event) {
@@ -1219,7 +1307,11 @@ function changePassword(event) {
 // 发布公告
 function publishAnnouncement() {
     const content = document.getElementById('announcement-content').value;
-    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const today = `${year}-${month}-${day}`;
 
     // 验证内容是否为空
     if (!content.trim()) {
@@ -1261,7 +1353,11 @@ function publishAnnouncement() {
 
 // 取消发布公告
 function cancelAnnouncement() {
-    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const today = `${year}-${month}-${day}`;
 
     // 调用后端API清空今天的公告
     fetch('/api/cancel-announcement', {
@@ -1306,39 +1402,46 @@ function updateAnnouncementDateTime() {
 
 // 更新公告预览
 function updatePreview() {
-    const content = document.getElementById('announcement-content').value;
     const now = new Date();
-    const previewContent = document.getElementById('announcement-preview-content');
-
-    if (!content.trim()) {
-        previewContent.innerHTML = '<p style="color: #999;">预览区域 - 公告内容将显示在这里</p>';
-        return;
-    }
-
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
+    const today = `${year}-${month}-${day}`;
+    const previewContent = document.getElementById('announcement-preview-content');
 
-    previewContent.innerHTML = `
-        <p><strong>日期：</strong>${year}-${month}-${day}</p>
-        <p><strong>内容：</strong>${content.replace(/\n/g, '<br>')}</p>
-    `;
+    fetch(`/api/announcement-records?date=${today}`)
+        .then(response => response.json())
+        .then(data => {
+            let hasPublishedAnnouncement = false;
+            let publishedContent = '';
+
+            for (let i = 0; i < data.length; i++) {
+                const record = data[i];
+                if (record.published && record.content && record.content.trim() !== '') {
+                    hasPublishedAnnouncement = true;
+                    publishedContent = record.content;
+                    break;
+                }
+            }
+
+            if (hasPublishedAnnouncement) {
+                previewContent.innerHTML = `
+                    <p><strong>日期：</strong>${today}</p>
+                    <p><strong>内容：</strong>${publishedContent.replace(/\n/g, '<br>')}</p>
+                `;
+            } else {
+                previewContent.innerHTML = '<p style="color: #999;">今日暂无公告</p>';
+            }
+        })
+        .catch(error => {
+            console.error('加载公告数据失败:', error);
+            previewContent.innerHTML = '<p style="color: #999;">今日暂无公告</p>';
+        });
 }
 
 // 加载已保存的公告
 function loadAnnouncement() {
-    const announcementData = localStorage.getItem('dailyAnnouncement');
-    if (!announcementData) {
-        return;
-    }
-
-    try {
-        const data = JSON.parse(announcementData);
-        document.getElementById('announcement-content').value = data.content;
-        updatePreview();
-    } catch (error) {
-        console.error('加载公告数据失败:', error);
-    }
+    updatePreview();
 }
 
 // 加载所有订单列表

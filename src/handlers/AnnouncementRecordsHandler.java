@@ -28,7 +28,7 @@ public class AnnouncementRecordsHandler extends BaseHandler {
                     }
                 }
 
-                String sql = "SELECT id, content, announcement_date, publish_time FROM announcements";
+                String sql = "SELECT id, content, announcement_date, publish_time, published FROM announcements";
                 if (date != null && !date.isEmpty()) {
                     sql += " WHERE announcement_date = ?";
                 }
@@ -48,6 +48,7 @@ public class AnnouncementRecordsHandler extends BaseHandler {
                     record.put("content", rs.getString("content"));
                     record.put("announcement_date", rs.getDate("announcement_date").toString());
                     record.put("publish_time", rs.getTimestamp("publish_time").toString());
+                    record.put("published", rs.getBoolean("published"));
                     recordsArray.put(record);
                 }
 
