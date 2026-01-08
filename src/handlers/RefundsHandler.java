@@ -38,7 +38,7 @@ public class RefundsHandler extends BaseHandler {
         try {
             connection = getConnection();
 
-            String sql = "select rt.btno,b.bno,b.date,rt.rdate,rt.rtime,MAX(p.idno) as idno,MAX(p.name) as name,MAX(p.tel) as tel,MAX(b.staName) as staName,MAX(b.endName) as endName,MAX(b.price) as price from refund_ticket rt left join bus b on rt.bno=b.bno left join passenger p on rt.idno=p.idno group by rt.btno";
+            String sql = "select rt.btno,b.bno,b.date,rt.rdate,rt.rtime,rt.idno,rt.passengerName,rt.passengerPhone,b.staName,b.endName,b.price,rt.refundAmount from refund_ticket rt left join bus b on rt.bno=b.bno";
             PreparedStatement pstmt = connection.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
 
@@ -54,11 +54,14 @@ public class RefundsHandler extends BaseHandler {
                 refundJson.put("rdate", rs.getDate("rdate").toString());
                 refundJson.put("rtime", rs.getTime("rtime").toString());
                 refundJson.put("idno", rs.getString("idno"));
-                refundJson.put("passengerName", rs.getString("name") != null ? rs.getString("name") : "");
-                refundJson.put("passengerPhone", rs.getString("tel") != null ? rs.getString("tel") : "");
+                refundJson.put("passengerName",
+                        rs.getString("passengerName") != null ? rs.getString("passengerName") : "");
+                refundJson.put("passengerPhone",
+                        rs.getString("passengerPhone") != null ? rs.getString("passengerPhone") : "");
                 refundJson.put("staName", rs.getString("staName") != null ? rs.getString("staName") : "");
                 refundJson.put("endName", rs.getString("endName") != null ? rs.getString("endName") : "");
                 refundJson.put("price", rs.getFloat("price"));
+                refundJson.put("refundAmount", rs.getFloat("refundAmount"));
                 refundsArray.put(refundJson);
             }
 
@@ -92,9 +95,8 @@ public class RefundsHandler extends BaseHandler {
                 }
             }
 
-            String sql = "select rt.btno,b.bno,b.date,rt.rdate,rt.rtime,MAX(p.idno) as idno,MAX(p.name) as name,MAX(p.tel) as tel,MAX(b.staName) as staName,MAX(b.endName) as endName,MAX(b.price) as price from refund_ticket rt left join bus b on rt.bno=b.bno left join passenger p on rt.idno=p.idno ";
+            String sql = "select rt.btno,b.bno,b.date,rt.rdate,rt.rtime,rt.idno,rt.passengerName,rt.passengerPhone,b.staName,b.endName,b.price,rt.refundAmount from refund_ticket rt left join bus b on rt.bno=b.bno ";
             String whereClause = "";
-            String groupBy = " group by rt.btno";
 
             switch (type) {
                 case "订单号":
@@ -116,21 +118,24 @@ public class RefundsHandler extends BaseHandler {
                     whereClause = "where rt.rdate = ?";
                     break;
                 case "乘客姓名":
-                    whereClause = "where p.name like ?";
+                    whereClause = "where rt.passengerName like ?";
                     break;
                 case "乘客电话":
-                    whereClause = "where p.tel like ?";
+                    whereClause = "where rt.passengerPhone like ?";
+                    break;
+                case "身份证":
+                    whereClause = "where rt.idno like ?";
                     break;
                 default:
                     whereClause = "where rt.btno like ? or b.bno like ?";
                     break;
             }
 
-            sql = sql + whereClause + groupBy;
+            sql = sql + whereClause;
             PreparedStatement pstmt = connection.prepareStatement(sql);
 
             if (type.equals("订单号") || type.equals("车次号") || type.equals("出发站") ||
-                    type.equals("终点站") || type.equals("乘客姓名") || type.equals("乘客电话")) {
+                    type.equals("终点站") || type.equals("乘客姓名") || type.equals("乘客电话") || type.equals("身份证")) {
                 pstmt.setString(1, "%" + keyword + "%");
             } else if (type.equals("发车日期") || type.equals("退订日期")) {
                 pstmt.setString(1, keyword);
@@ -153,11 +158,14 @@ public class RefundsHandler extends BaseHandler {
                 refundJson.put("rdate", rs.getDate("rdate").toString());
                 refundJson.put("rtime", rs.getTime("rtime").toString());
                 refundJson.put("idno", rs.getString("idno"));
-                refundJson.put("passengerName", rs.getString("name") != null ? rs.getString("name") : "");
-                refundJson.put("passengerPhone", rs.getString("tel") != null ? rs.getString("tel") : "");
+                refundJson.put("passengerName",
+                        rs.getString("passengerName") != null ? rs.getString("passengerName") : "");
+                refundJson.put("passengerPhone",
+                        rs.getString("passengerPhone") != null ? rs.getString("passengerPhone") : "");
                 refundJson.put("staName", rs.getString("staName") != null ? rs.getString("staName") : "");
                 refundJson.put("endName", rs.getString("endName") != null ? rs.getString("endName") : "");
                 refundJson.put("price", rs.getFloat("price"));
+                refundJson.put("refundAmount", rs.getFloat("refundAmount"));
                 refundsArray.put(refundJson);
             }
 
@@ -194,10 +202,9 @@ public class RefundsHandler extends BaseHandler {
                 return;
             }
 
-            String sql = "select r.btno, r.bno, b.staName, b.endName, b.date, b.price, r.rdate, r.rtime, p.name, p.tel "
+            String sql = "select r.btno, r.bno, b.staName, b.endName, b.date, b.price, r.rdate, r.rtime, r.idno, r.passengerName, r.passengerPhone "
                     +
-                    "from refund_ticket r left join passenger p on r.idno=p.idno and r.userName=p.userName " +
-                    "left join bus b on r.bno=b.bno " +
+                    "from refund_ticket r left join bus b on r.bno=b.bno " +
                     "where r.userName=? order by r.btno ASC";
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, userName);
@@ -214,8 +221,11 @@ public class RefundsHandler extends BaseHandler {
                 refundJson.put("price", rs.getFloat("price"));
                 refundJson.put("rdate", rs.getDate("rdate").toString());
                 refundJson.put("rtime", rs.getTime("rtime").toString());
-                refundJson.put("passengerName", rs.getString("name") != null ? rs.getString("name") : "");
-                refundJson.put("passengerPhone", rs.getString("tel") != null ? rs.getString("tel") : "");
+                refundJson.put("idno", rs.getString("idno") != null ? rs.getString("idno") : "");
+                refundJson.put("passengerName",
+                        rs.getString("passengerName") != null ? rs.getString("passengerName") : "");
+                refundJson.put("passengerPhone",
+                        rs.getString("passengerPhone") != null ? rs.getString("passengerPhone") : "");
                 refundsArray.put(refundJson);
             }
 

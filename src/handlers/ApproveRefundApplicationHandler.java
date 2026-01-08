@@ -44,6 +44,9 @@ public class ApproveRefundApplicationHandler extends BaseHandler {
                     int bno = rs.getInt("bno");
                     String idno = rs.getString("idno");
                     String status = rs.getString("status");
+                    String userName = rs.getString("userName");
+                    String passengerName = rs.getString("passengerName");
+                    String passengerPhone = rs.getString("passengerPhone");
                     rs.close();
                     getRefundPstmt.close();
 
@@ -55,26 +58,63 @@ public class ApproveRefundApplicationHandler extends BaseHandler {
                         return;
                     }
 
-                    String getBookSql = "SELECT bt.*, b.staName, b.endName, b.date, b.time, u.userName FROM book_ticket bt LEFT JOIN bus b ON bt.bno = b.bno LEFT JOIN user u ON bt.userName = u.userName WHERE bt.btno = ?";
+                    String getBookSql = "SELECT bt.*, b.staName, b.endName, b.date, b.time, b.price FROM book_ticket bt LEFT JOIN bus b ON bt.bno = b.bno WHERE bt.btno = ?";
                     PreparedStatement getBookPstmt = connection.prepareStatement(getBookSql);
                     getBookPstmt.setInt(1, btno);
                     ResultSet bookRs = getBookPstmt.executeQuery();
 
-                    String userName = null;
                     String staName = null;
                     String endName = null;
                     java.sql.Date date = null;
                     java.sql.Time time = null;
+                    float price = 0;
 
                     if (bookRs.next()) {
-                        userName = bookRs.getString("userName");
                         staName = bookRs.getString("staName");
                         endName = bookRs.getString("endName");
                         date = bookRs.getDate("date");
                         time = bookRs.getTime("time");
+                        price = bookRs.getFloat("price");
                     }
                     bookRs.close();
                     getBookPstmt.close();
+
+                    String getApplySql = "SELECT apply_date, apply_time FROM refund_application WHERE btno = ?";
+                    PreparedStatement getApplyPstmt = connection.prepareStatement(getApplySql);
+                    getApplyPstmt.setInt(1, btno);
+                    ResultSet applyRs = getApplyPstmt.executeQuery();
+
+                    java.sql.Date applyDate = null;
+                    java.sql.Time applyTime = null;
+                    if (applyRs.next()) {
+                        applyDate = applyRs.getDate("apply_date");
+                        applyTime = applyRs.getTime("apply_time");
+                    }
+                    applyRs.close();
+                    getApplyPstmt.close();
+
+                    float refundAmount = 0;
+                    if (price > 0 && date != null && time != null && applyDate != null && applyTime != null) {
+                        long departureDateTime = date.getTime() + time.getTime();
+                        long applyDateTime = applyDate.getTime() + applyTime.getTime();
+                        long timeDiff = departureDateTime - applyDateTime;
+                        double hoursDiff = timeDiff / (1000.0 * 60 * 60);
+
+                        double refundPercentage = 100;
+                        if (hoursDiff >= 5) {
+                            refundPercentage = 100;
+                        } else if (hoursDiff >= 2) {
+                            refundPercentage = 90;
+                        } else if (hoursDiff >= 0.5) {
+                            refundPercentage = 80;
+                        } else if (hoursDiff >= 10.0 / 60) {
+                            refundPercentage = 50;
+                        } else {
+                            refundPercentage = 0;
+                        }
+
+                        refundAmount = (float) (price * refundPercentage / 100);
+                    }
 
                     connection.setAutoCommit(false);
 
@@ -82,12 +122,17 @@ public class ApproveRefundApplicationHandler extends BaseHandler {
                         RefundDao refundDao = new RefundDao();
                         RefundTicket refundTicket = new RefundTicket();
                         refundTicket.setBtno(btno);
+                        refundTicket.setUserName(userName);
                         refundTicket.setBno(bno);
                         refundTicket.setIdno(idno);
                         refundTicket.setStaName(staName);
                         refundTicket.setEndName(endName);
                         refundTicket.setDate(date);
                         refundTicket.setTime(time);
+                        refundTicket.setPassengerName(passengerName);
+                        refundTicket.setPassengerPhone(passengerPhone);
+                        refundTicket.setPrice(price);
+                        refundTicket.setRefundAmount(refundAmount);
                         refundDao.addRefund(connection, refundTicket);
 
                         String sql = "UPDATE refund_application SET status = \"approved\", process_time = NOW(), processed_by = \"手动审批\" WHERE btno = ?";

@@ -10,6 +10,8 @@ public class BookTicket {
     private java.sql.Date bdate;
     private java.sql.Time btime;
     private String userName;
+    private String passengerName;
+    private String passengerPhone;
 
     public int getBtno() {
         return btno;
@@ -57,6 +59,22 @@ public class BookTicket {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPassengerName() {
+        return passengerName;
+    }
+
+    public void setPassengerName(String passengerName) {
+        this.passengerName = passengerName;
+    }
+
+    public String getPassengerPhone() {
+        return passengerPhone;
+    }
+
+    public void setPassengerPhone(String passengerPhone) {
+        this.passengerPhone = passengerPhone;
     }
 
     public BookTicket() {

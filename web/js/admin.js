@@ -317,7 +317,7 @@ function loadPendingRefunds() {
 
             if (data.length === 0) {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="11" style="text-align: center; color: #999;">暂无待处理的退票申请</td>`;
+                row.innerHTML = `<td colspan="12" style="text-align: center; color: #999;">暂无待处理的退票申请</td>`;
                 tableBody.appendChild(row);
                 // 更新通知徽章，即使列表为空
                 updateNotificationBadge(0);
@@ -359,6 +359,7 @@ function loadPendingRefunds() {
                     <td>${refund.departure_time || refund.time || '未知'}</td>
                     <td>${refund.apply_date} ${refund.apply_time}</td>
                     <td>${refund.refund_reason}</td>
+                    <td>${refund.price ? refund.price + '元' : '-'}</td>
                     <td>${refundAmount > 0 ? refundAmount + '元' : '-'}</td>
                     <td>
                         <button class="approve-btn" onclick="approveRefund(${refund.btno})">同意</button>
@@ -387,7 +388,7 @@ function loadProcessedRefunds() {
 
             if (data.length === 0) {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="12" style="text-align: center; color: #999;">暂无已处理的退票申请</td>`;
+                row.innerHTML = `<td colspan="13" style="text-align: center; color: #999;">暂无已处理的退票申请</td>`;
                 tableBody.appendChild(row);
                 return;
             }
@@ -431,6 +432,7 @@ function loadProcessedRefunds() {
                     <td>${refund.refund_reason}</td>
                     <td>${refund.status === 'approved' ? '已通过' : '被拒绝'}</td>
                     <td>${refund.processed_by || '手动审批'}</td>
+                    <td>${refund.price ? refund.price + '元' : '-'}</td>
                     <td>${refundAmount > 0 ? refundAmount + '元' : '-'}</td>
                 `;
                 tableBody.appendChild(row);
@@ -1454,7 +1456,7 @@ function loadOrderList() {
 
             if (data.length === 0) {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="12" style="text-align: center; color: #999; padding: 20px;">暂无订单数据</td>`;
+                row.innerHTML = `<td colspan="13" style="text-align: center; color: #999; padding: 20px;">暂无订单数据</td>`;
                 orderTable.appendChild(row);
                 return;
             }
@@ -1471,6 +1473,7 @@ function loadOrderList() {
                     <td>${order.price}</td>
                     <td>${order.bookDate}</td>
                     <td>${order.bookTime}</td>
+                    <td>${order.idno || '-'}</td>
                     <td>${order.passengerName || '-'}</td>
                     <td>${order.passengerPhone || '-'}</td>
                 `;
@@ -1533,7 +1536,7 @@ function searchOrders() {
 
             if (data.length === 0) {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="12" style="text-align: center; color: #999; padding: 20px;">没有找到匹配的订单数据</td>`;
+                row.innerHTML = `<td colspan="13" style="text-align: center; color: #999; padding: 20px;">没有找到匹配的订单数据</td>`;
                 orderTable.appendChild(row);
                 return;
             }
@@ -1550,6 +1553,7 @@ function searchOrders() {
                     <td>${order.price}</td>
                     <td>${order.bookDate}</td>
                     <td>${order.bookTime}</td>
+                    <td>${order.idno || '-'}</td>
                     <td>${order.passengerName || '-'}</td>
                     <td>${order.passengerPhone || '-'}</td>
                 `;
@@ -1580,7 +1584,7 @@ function searchRefunds() {
 
             if (data.length === 0) {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="9" style="text-align: center; color: #999; padding: 20px;">没有找到匹配的退订记录数据</td>`;
+                row.innerHTML = `<td colspan="11" style="text-align: center; color: #999; padding: 20px;">没有找到匹配的退订记录数据</td>`;
                 refundTable.appendChild(row);
                 return;
             }
@@ -1594,9 +1598,11 @@ function searchRefunds() {
                     <td>${refund.endName}</td>
                     <td>${refund.date}</td>
                     <td>${refund.rdate}</td>
+                    <td>${refund.idno || '-'}</td>
                     <td>${refund.passengerName}</td>
                     <td>${refund.passengerPhone}</td>
-                    <td>${refund.price}元</td>
+                    <td>${refund.price ? refund.price + '元' : '-'}</td>
+                    <td>${refund.refundAmount > 0 ? refund.refundAmount + '元' : '-'}</td>
                 `;
                 refundTable.appendChild(row);
             });
@@ -1617,7 +1623,7 @@ function loadRefundList() {
 
             if (data.length === 0) {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="9" style="text-align: center; color: #999; padding: 20px;">暂无退订记录数据</td>`;
+                row.innerHTML = `<td colspan="11" style="text-align: center; color: #999; padding: 20px;">暂无退订记录数据</td>`;
                 refundTable.appendChild(row);
                 return;
             }
@@ -1631,9 +1637,11 @@ function loadRefundList() {
                     <td>${refund.endName}</td>
                     <td>${refund.date}</td>
                     <td>${refund.rdate}</td>
+                    <td>${refund.idno || '-'}</td>
                     <td>${refund.passengerName}</td>
                     <td>${refund.passengerPhone}</td>
-                    <td>${refund.price}元</td>
+                    <td>${refund.price ? refund.price + '元' : '-'}</td>
+                    <td>${refund.refundAmount > 0 ? refund.refundAmount + '元' : '-'}</td>
                 `;
                 refundTable.appendChild(row);
             });
@@ -1643,48 +1651,6 @@ function loadRefundList() {
             showNotification('加载退订列表失败，请稍后重试！', false);
         });
 }
-
-// 初始化管理员SSE连接
-let adminSSEConnection = null;
-
-function initAdminSSE() {
-    // 如果已经有连接，先关闭
-    if (adminSSEConnection) {
-        adminSSEConnection.close();
-        adminSSEConnection = null;
-    }
-
-    // 建立新的SSE连接
-    adminSSEConnection = new EventSource('/api/sse/admin');
-
-    adminSSEConnection.onmessage = function (event) {
-        // 当收到新退票申请通知时，刷新待处理退票列表并显示提示
-        if (event.data === 'new_refund_application') {
-            loadPendingRefunds();
-            showNotification('有新的退票申请需要处理！', true);
-        }
-    };
-
-    adminSSEConnection.onerror = function (error) {
-        // 关闭连接
-        if (adminSSEConnection) {
-            adminSSEConnection.close();
-            adminSSEConnection = null;
-        }
-        // 5秒后尝试重新连接
-        setTimeout(() => {
-            initAdminSSE();
-        }, 5000);
-    };
-}
-
-// 页面卸载时关闭管理员SSE连接
-window.addEventListener('beforeunload', function () {
-    if (adminSSEConnection) {
-        adminSSEConnection.close();
-        adminSSEConnection = null;
-    }
-});
 
 
 

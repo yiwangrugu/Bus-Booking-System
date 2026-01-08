@@ -63,6 +63,10 @@ public class BookingHandler extends BaseHandler {
                     passenger.setName(request.getString("passengerName"));
                     passenger.setPhone(request.getString("passengerPhone"));
 
+                    System.out.println("购票数据 - idno: " + request.getString("idno") +
+                            ", passengerName: " + request.getString("passengerName") +
+                            ", passengerPhone: " + request.getString("passengerPhone"));
+
                     PassDao passDao = new PassDao();
                     passDao.addPass(connection, passenger);
 
@@ -72,6 +76,8 @@ public class BookingHandler extends BaseHandler {
                     bookTicket.setIdno(request.getString("idno"));
                     bookTicket.setBdate(new Date(System.currentTimeMillis()));
                     bookTicket.setBtime(new Time(System.currentTimeMillis()));
+                    bookTicket.setPassengerName(request.getString("passengerName"));
+                    bookTicket.setPassengerPhone(request.getString("passengerPhone"));
 
                     boolean success = bookDao.addBookTicket(connection, bookTicket);
 

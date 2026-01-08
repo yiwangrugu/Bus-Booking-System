@@ -305,6 +305,8 @@ function confirmBooking() {
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
 
+    console.log('确认订票 - idno:', idno, 'name:', name, 'phone:', phone);
+
     if (!idno || !name || !phone) {
         showNotification('请填写完整的乘客信息！', false);
         return;
@@ -340,6 +342,8 @@ function proceedBooking(idno, name, phone, currentUser) {
         passengerName: name,
         passengerPhone: phone
     };
+
+    console.log('发送购票数据:', bookingData);
 
     // 获取动画元素
     const payAnimation = document.getElementById('pay-animation');
@@ -488,6 +492,7 @@ function loadOrders() {
                     <td>${order.price}</td>
                     <td>${order.bookDate}</td>
                     <td>${order.bookTime}</td>
+                    <td>${order.idno || ''}</td>
                     <td>${order.passengerName}</td>
                     <td>${order.passengerPhone}</td>
                     <td><button class="${refundBtnClass}" onclick="${refundBtnOnclick}" ${refundBtnDisabled}>${refundBtnText}</button></td>
@@ -808,17 +813,14 @@ function selectFrequentPassenger() {
     const passengerSelect = document.getElementById('select-passenger');
     const selectedPassenger = passengerSelect.value;
 
-    if (selectedPassenger) {
+    // 只在用户主动选择乘客时才填充表单，避免在 loadPassengers() 清空选择框时触发
+    if (selectedPassenger && selectedPassenger !== '') {
         const passenger = JSON.parse(selectedPassenger);
         document.getElementById('idno').value = passenger.idno;
         document.getElementById('name').value = passenger.name;
         document.getElementById('phone').value = passenger.phone;
-    } else {
-        // 清空表单
-        document.getElementById('idno').value = '';
-        document.getElementById('name').value = '';
-        document.getElementById('phone').value = '';
     }
+    // 移除清空表单的逻辑，避免在 loadPassengers() 清空选择框时触发
 }
 
 // 退出登录
@@ -1077,13 +1079,13 @@ function populateRefundTable(tableId, refunds, showActions) {
 
         if (tableId === 'pending-refunds-table') {
             emptyMessage = '暂无待处理的退票申请';
-            colspan = 10;
+            colspan = 14;
         } else if (tableId === 'approved-refunds-table') {
             emptyMessage = '暂无已通过的退票申请';
-            colspan = 10;
+            colspan = 14;
         } else if (tableId === 'rejected-refunds-table') {
             emptyMessage = '暂无已拒绝的退票申请';
-            colspan = 10;
+            colspan = 14;
         }
 
         const emptyRow = document.createElement('tr');
@@ -1127,12 +1129,16 @@ function populateRefundTable(tableId, refunds, showActions) {
             <td>${isBusDeleted ? '已下架' : (refund.endName || '')}</td>
             <td>${isBusDeleted ? '已下架' : (refund.date || '')}</td>
             <td>${isBusDeleted ? '已下架' : (refund.time || '')}</td>
+            <td>${refund.idno || ''}</td>
+            <td>${refund.passengerName || ''}</td>
+            <td>${refund.passengerPhone || ''}</td>
             <td>${refund.apply_date} ${refund.apply_time}</td>
         `;
 
         if (showActions) {
             rowHtml += `
                 <td>${refund.refund_reason}</td>
+                <td>${refund.price ? refund.price + '元' : '-'}</td>
                 <td>${refundAmount > 0 ? refundAmount + '元' : '-'}</td>
                 <td><button class="refund-action-btn" onclick="cancelRefundApplication(${refund.btno})">取消申请</button></td>
             `;
@@ -1140,12 +1146,14 @@ function populateRefundTable(tableId, refunds, showActions) {
             rowHtml += `
                 <td>${refund.process_time}</td>
                 <td>${refund.refund_reason}</td>
+                <td>${refund.price ? refund.price + '元' : '-'}</td>
                 <td>${refundAmount > 0 ? refundAmount + '元' : '-'}</td>
             `;
         } else if (tableId === 'rejected-refunds-table') {
             rowHtml += `
                 <td>${refund.process_time}</td>
                 <td>${refund.refund_reason}</td>
+                <td>${refund.price ? refund.price + '元' : '-'}</td>
                 <td><button class="refund-action-btn" onclick="showRejectReasonPopup(${refund.btno})">查看详情</button></td>
             `;
         }

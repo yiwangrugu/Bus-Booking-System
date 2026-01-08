@@ -10,13 +10,15 @@ import java.sql.ResultSet;
 public class BookDao {
     public BookTicket addBook(Connection con, BookTicket bt) throws Exception {
         BookTicket bt1 = new BookTicket();
-        String sql = "insert into book_ticket(bno,idno,bdate,btime,userName) values(?,?,?,?,?)";
+        String sql = "insert into book_ticket(bno,idno,bdate,btime,userName,passengerName,passengerPhone) values(?,?,?,?,?,?,?)";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setInt(1, bt.getBno());
         pstmt.setString(2, bt.getIdno());
         pstmt.setDate(3, new java.sql.Date(bt.getBdate().getTime()));
         pstmt.setTime(4, bt.getBtime());
         pstmt.setString(5, bt.getUserName());
+        pstmt.setString(6, bt.getPassengerName());
+        pstmt.setString(7, bt.getPassengerPhone());
         if (pstmt.executeUpdate() > 0) {
             bt1 = bt;
         }
@@ -53,35 +55,37 @@ public class BookDao {
     }
 
     public ResultSet list(Connection con, User user) throws Exception {
-        String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,p.name,p.tel "
+        String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,bt.passengerName,bt.passengerPhone "
                 +
-                "from book_ticket bt left join passenger p on bt.idno=p.idno and bt.userName=p.userName  left join user on bt.userName=user.userName left join bus b on bt.bno=b.bno "
+                "from book_ticket bt left join user on bt.userName=user.userName left join bus b on bt.bno=b.bno "
                 +
-                "where user.userName=? group by p.name, p.tel,bt.btno order by bt.btno ASC ";
+                "where user.userName=? order by bt.btno ASC ";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setString(1, user.getUserName());
         return pstmt.executeQuery();
     }
 
     public ResultSet getBookTicketsByUserName(Connection con, String userName) throws Exception {
-        String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,p.name,p.tel "
+        String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,bt.passengerName,bt.passengerPhone "
                 +
-                "from book_ticket bt left join passenger p on bt.idno=p.idno and bt.userName=p.userName  left join bus b on bt.bno=b.bno "
+                "from book_ticket bt left join bus b on bt.bno=b.bno "
                 +
-                "where bt.userName=? group by p.name, p.tel,bt.btno order by bt.btno ASC ";
+                "where bt.userName=? order by bt.btno ASC ";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setString(1, userName);
         return pstmt.executeQuery();
     }
 
     public boolean addBookTicket(Connection con, BookTicket bt) throws Exception {
-        String sql = "insert into book_ticket(bno,idno,bdate,btime,userName) values(?,?,?,?,?)";
+        String sql = "insert into book_ticket(bno,idno,bdate,btime,userName,passengerName,passengerPhone) values(?,?,?,?,?,?,?)";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setInt(1, bt.getBno());
         pstmt.setString(2, bt.getIdno());
         pstmt.setDate(3, new java.sql.Date(bt.getBdate().getTime()));
         pstmt.setTime(4, bt.getBtime());
         pstmt.setString(5, bt.getUserName());
+        pstmt.setString(6, bt.getPassengerName());
+        pstmt.setString(7, bt.getPassengerPhone());
 
         return pstmt.executeUpdate() > 0;
     }
@@ -101,9 +105,8 @@ public class BookDao {
     }
 
     public ResultSet list2(Connection con, int selbno) throws Exception {
-        String sql = "select distinct b.bno,bt.btno,bt.bdate,bt.btime,p.idno,p.name,p.tel " +
-                "from bus b left join book_ticket bt on b.bno=bt.bno left join passenger p on bt.idno=p.idno and bt.userName=p.userName "
-                +
+        String sql = "select distinct b.bno,bt.btno,bt.bdate,bt.btime,bt.idno,bt.passengerName,bt.passengerPhone " +
+                "from bus b left join book_ticket bt on b.bno=bt.bno " +
                 "where b.bno=? order by bt.btno ASC ";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setInt(1, selbno);
@@ -111,9 +114,9 @@ public class BookDao {
     }
 
     public ResultSet getAllBookTickets(Connection con) throws Exception {
-        String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,p.name,p.tel "
+        String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,bt.passengerName,bt.passengerPhone "
                 +
-                "from book_ticket bt left join passenger p on bt.idno=p.idno and bt.userName=p.userName left join bus b on bt.bno=b.bno "
+                "from book_ticket bt left join bus b on bt.bno=b.bno "
                 +
                 "order by bt.btno ASC ";
         PreparedStatement pstmt = con.prepareStatement(sql);

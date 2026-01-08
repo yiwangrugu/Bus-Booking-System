@@ -123,6 +123,36 @@ public class PassengersHandler extends BaseHandler {
         Passenger passenger = new Passenger();
         passenger.setUserName(userName);
         passenger.setIdno(idno);
+
+        java.sql.PreparedStatement ps = connection.prepareStatement("SELECT name, tel FROM passenger WHERE userName = ? AND idno = ?");
+        ps.setString(1, userName);
+        ps.setString(2, idno);
+        java.sql.ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            String passengerName = rs.getString("name");
+            String passengerPhone = rs.getString("tel");
+
+            java.sql.PreparedStatement updateBookTicket = connection.prepareStatement(
+                "UPDATE book_ticket SET passengerName = ?, passengerPhone = ? WHERE userName = ? AND idno = ? AND (passengerName IS NULL OR passengerName = '')"
+            );
+            updateBookTicket.setString(1, passengerName);
+            updateBookTicket.setString(2, passengerPhone);
+            updateBookTicket.setString(3, userName);
+            updateBookTicket.setString(4, idno);
+            updateBookTicket.executeUpdate();
+
+            java.sql.PreparedStatement updateRefundTicket = connection.prepareStatement(
+                "UPDATE refund_ticket SET passengerName = ?, passengerPhone = ? WHERE idno = ? AND (passengerName IS NULL OR passengerName = '')"
+            );
+            updateRefundTicket.setString(1, passengerName);
+            updateRefundTicket.setString(2, passengerPhone);
+            updateRefundTicket.setString(3, idno);
+            updateRefundTicket.executeUpdate();
+        }
+        rs.close();
+        ps.close();
+
         passDao.deletePass(connection, passenger);
 
         JSONObject response = new JSONObject();

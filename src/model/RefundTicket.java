@@ -5,6 +5,7 @@ import java.sql.Time;
 
 public class RefundTicket {
     private int btno;
+    private String userName;
     private int bno;
     private String idno;
     private Date rdate;
@@ -13,6 +14,10 @@ public class RefundTicket {
     private String endName;
     private Date date;
     private Time time;
+    private String passengerName;
+    private String passengerPhone;
+    private float price;
+    private float refundAmount;
 
     public int getBtno() {
         return btno;
@@ -20,6 +25,14 @@ public class RefundTicket {
 
     public void setBtno(int btno) {
         this.btno = btno;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public int getBno() {
@@ -84,6 +97,38 @@ public class RefundTicket {
 
     public void setTime(Time time) {
         this.time = time;
+    }
+
+    public String getPassengerName() {
+        return passengerName;
+    }
+
+    public void setPassengerName(String passengerName) {
+        this.passengerName = passengerName;
+    }
+
+    public String getPassengerPhone() {
+        return passengerPhone;
+    }
+
+    public void setPassengerPhone(String passengerPhone) {
+        this.passengerPhone = passengerPhone;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public float getRefundAmount() {
+        return refundAmount;
+    }
+
+    public void setRefundAmount(float refundAmount) {
+        this.refundAmount = refundAmount;
     }
 
     public RefundTicket() {

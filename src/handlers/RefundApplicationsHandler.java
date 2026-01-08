@@ -83,6 +83,10 @@ public class RefundApplicationsHandler extends BaseHandler {
                 refund.put("endName", rs.getString("endName") != null ? rs.getString("endName") : "");
                 refund.put("price", rs.getFloat("price"));
 
+                refund.put("passengerName", rs.getString("passengerName") != null ? rs.getString("passengerName") : "");
+                refund.put("passengerPhone",
+                        rs.getString("passengerPhone") != null ? rs.getString("passengerPhone") : "");
+
                 if (rs.getTimestamp("process_time") != null) {
                     refund.put("process_time", rs.getTimestamp("process_time").toString());
                 }

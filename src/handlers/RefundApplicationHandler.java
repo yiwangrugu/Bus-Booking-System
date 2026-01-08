@@ -48,13 +48,28 @@ public class RefundApplicationHandler extends BaseHandler {
                 rs.close();
                 checkStmt.close();
 
-                String sql = "INSERT INTO refund_application (btno, userName, bno, idno, apply_date, apply_time, refund_reason, status) VALUES (?, ?, ?, ?, CURDATE(), CURTIME(), ?, 'pending')";
+                String getPassengerSql = "SELECT passengerName, passengerPhone FROM book_ticket WHERE btno = ?";
+                PreparedStatement getPassengerStmt = connection.prepareStatement(getPassengerSql);
+                getPassengerStmt.setInt(1, orderId);
+                ResultSet passengerRs = getPassengerStmt.executeQuery();
+                String passengerName = "";
+                String passengerPhone = "";
+                if (passengerRs.next()) {
+                    passengerName = passengerRs.getString("passengerName");
+                    passengerPhone = passengerRs.getString("passengerPhone");
+                }
+                passengerRs.close();
+                getPassengerStmt.close();
+
+                String sql = "INSERT INTO refund_application (btno, userName, bno, idno, apply_date, apply_time, refund_reason, status, passengerName, passengerPhone) VALUES (?, ?, ?, ?, CURDATE(), CURTIME(), ?, 'pending', ?, ?)";
                 PreparedStatement pstmt = connection.prepareStatement(sql);
                 pstmt.setInt(1, orderId);
                 pstmt.setString(2, bookTicket.getUserName());
                 pstmt.setInt(3, bookTicket.getBno());
                 pstmt.setString(4, bookTicket.getIdno());
                 pstmt.setString(5, refundReason);
+                pstmt.setString(6, passengerName);
+                pstmt.setString(7, passengerPhone);
 
                 int rowsAffected = pstmt.executeUpdate();
                 pstmt.close();

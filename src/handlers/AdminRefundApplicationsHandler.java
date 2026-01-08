@@ -21,14 +21,12 @@ public class AdminRefundApplicationsHandler extends BaseHandler {
                         "COALESCE(b.time, b2.time) as time, " +
                         "COALESCE(b.staName, b2.staName) as staName, " +
                         "COALESCE(b.endName, b2.endName) as endName, " +
-                        "COALESCE(b.price, b2.price) as price, " +
-                        "p.name, p.tel " +
+                        "COALESCE(b.price, b2.price) as price " +
                         "FROM refund_application ra " +
                         "LEFT JOIN book_ticket bt ON ra.btno = bt.btno " +
                         "LEFT JOIN bus b ON bt.bno = b.bno " +
                         "LEFT JOIN refund_ticket rt ON ra.btno = rt.btno " +
                         "LEFT JOIN bus b2 ON rt.bno = b2.bno " +
-                        "LEFT JOIN passenger p ON ra.userName = p.userName AND ra.idno = p.idno " +
                         "WHERE ra.status = 'pending' " +
                         "ORDER BY ra.apply_date DESC, ra.apply_time DESC";
 
@@ -54,8 +52,10 @@ public class AdminRefundApplicationsHandler extends BaseHandler {
                     refund.put("endName", rs.getString("endName") != null ? rs.getString("endName") : "");
                     refund.put("price", rs.getFloat("price"));
 
-                    refund.put("passengerName", rs.getString("name") != null ? rs.getString("name") : "");
-                    refund.put("passengerPhone", rs.getString("tel") != null ? rs.getString("tel") : "");
+                    refund.put("passengerName",
+                            rs.getString("passengerName") != null ? rs.getString("passengerName") : "");
+                    refund.put("passengerPhone",
+                            rs.getString("passengerPhone") != null ? rs.getString("passengerPhone") : "");
 
                     refundsArray.put(refund);
                 }

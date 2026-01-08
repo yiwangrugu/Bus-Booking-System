@@ -35,9 +35,9 @@ public class OrdersHandler extends BaseHandler {
     try {
       connection = getConnection();
 
-      String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,p.name,p.tel "
+      String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,bt.idno,bt.passengerName,bt.passengerPhone "
           +
-          "from book_ticket bt left join passenger p on bt.idno=p.idno and bt.userName=p.userName left join bus b on bt.bno=b.bno "
+          "from book_ticket bt left join bus b on bt.bno=b.bno "
           +
           "order by bt.btno ASC";
       PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -55,8 +55,9 @@ public class OrdersHandler extends BaseHandler {
         orderJson.put("price", rs.getFloat("price"));
         orderJson.put("bookDate", rs.getDate("bdate").toString());
         orderJson.put("bookTime", rs.getTime("btime").toString());
-        orderJson.put("passengerName", rs.getString("name") != null ? rs.getString("name") : "");
-        orderJson.put("passengerPhone", rs.getString("tel") != null ? rs.getString("tel") : "");
+        orderJson.put("idno", rs.getString("idno") != null ? rs.getString("idno") : "");
+        orderJson.put("passengerName", rs.getString("passengerName") != null ? rs.getString("passengerName") : "");
+        orderJson.put("passengerPhone", rs.getString("passengerPhone") != null ? rs.getString("passengerPhone") : "");
         ordersArray.put(orderJson);
       }
 
@@ -90,10 +91,11 @@ public class OrdersHandler extends BaseHandler {
         }
       }
 
-      String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,p.name,p.tel " +
-          "from book_ticket bt left join passenger p on bt.idno=p.idno and bt.userName=p.userName left join bus b on bt.bno=b.bno ";
+      String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,bt.idno,bt.passengerName,bt.passengerPhone "
+          +
+          "from book_ticket bt left join bus b on bt.bno=b.bno ";
       String whereClause = "";
-      String groupBy = " group by p.name, p.tel,bt.btno order by bt.btno ASC";
+      String orderBy = " order by bt.btno ASC";
 
       switch (type) {
         case "订单号":
@@ -112,21 +114,24 @@ public class OrdersHandler extends BaseHandler {
           whereClause = "where b.date = ?";
           break;
         case "乘客姓名":
-          whereClause = "where p.name like ?";
+          whereClause = "where bt.passengerName like ?";
           break;
         case "乘客电话":
-          whereClause = "where p.tel like ?";
+          whereClause = "where bt.passengerPhone like ?";
+          break;
+        case "身份证":
+          whereClause = "where bt.idno like ?";
           break;
         default:
           whereClause = "where bt.btno like ? or bt.bno like ?";
           break;
       }
 
-      sql = sql + whereClause + groupBy;
+      sql = sql + whereClause + orderBy;
       PreparedStatement pstmt = connection.prepareStatement(sql);
 
       if (type.equals("订单号") || type.equals("车次号") || type.equals("出发站") ||
-          type.equals("终点站") || type.equals("乘客姓名") || type.equals("乘客电话")) {
+          type.equals("终点站") || type.equals("乘客姓名") || type.equals("乘客电话") || type.equals("身份证")) {
         pstmt.setString(1, "%" + keyword + "%");
       } else if (type.equals("发车日期")) {
         pstmt.setString(1, keyword);
@@ -149,8 +154,9 @@ public class OrdersHandler extends BaseHandler {
         orderJson.put("price", rs.getFloat("price"));
         orderJson.put("bookDate", rs.getDate("bdate").toString());
         orderJson.put("bookTime", rs.getTime("btime").toString());
-        orderJson.put("passengerName", rs.getString("name") != null ? rs.getString("name") : "");
-        orderJson.put("passengerPhone", rs.getString("tel") != null ? rs.getString("tel") : "");
+        orderJson.put("idno", rs.getString("idno") != null ? rs.getString("idno") : "");
+        orderJson.put("passengerName", rs.getString("passengerName") != null ? rs.getString("passengerName") : "");
+        orderJson.put("passengerPhone", rs.getString("passengerPhone") != null ? rs.getString("passengerPhone") : "");
         ordersArray.put(orderJson);
       }
 
@@ -223,11 +229,11 @@ public class OrdersHandler extends BaseHandler {
         return;
       }
 
-      String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,p.name,p.tel "
+      String sql = "select bt.btno,bt.bno,b.staName,b.endName,b.date,b.time,b.price,bt.bdate,bt.btime,bt.idno,bt.passengerName,bt.passengerPhone "
           +
-          "from book_ticket bt left join passenger p on bt.idno=p.idno and bt.userName=p.userName  left join bus b on bt.bno=b.bno "
+          "from book_ticket bt left join bus b on bt.bno=b.bno "
           +
-          "where bt.userName=? group by p.name, p.tel,bt.btno order by bt.btno ASC";
+          "where bt.userName=? order by bt.btno ASC";
       PreparedStatement pstmt = connection.prepareStatement(sql);
       pstmt.setString(1, userName);
       ResultSet rs = pstmt.executeQuery();
@@ -244,8 +250,9 @@ public class OrdersHandler extends BaseHandler {
         orderJson.put("price", rs.getFloat("price"));
         orderJson.put("bookDate", rs.getDate("bdate").toString());
         orderJson.put("bookTime", rs.getTime("btime").toString());
-        orderJson.put("passengerName", rs.getString("name") != null ? rs.getString("name") : "");
-        orderJson.put("passengerPhone", rs.getString("tel") != null ? rs.getString("tel") : "");
+        orderJson.put("idno", rs.getString("idno") != null ? rs.getString("idno") : "");
+        orderJson.put("passengerName", rs.getString("passengerName") != null ? rs.getString("passengerName") : "");
+        orderJson.put("passengerPhone", rs.getString("passengerPhone") != null ? rs.getString("passengerPhone") : "");
         ordersArray.put(orderJson);
       }
 
