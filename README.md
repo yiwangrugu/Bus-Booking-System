@@ -137,17 +137,17 @@ cd Bus-Booking-System
 
 3. 编译项目
 ```bash
-javac -cp lib/mysql-connector-j-8.0.33.jar -d out src/**/*.java
+javac -encoding UTF-8 -d bin -cp "bin;lib/*" src/**/*.java
 ```
 
 4. 运行服务器
 ```bash
-java -cp out;lib/mysql-connector-j-8.0.33.jar Main.WebServer
+java -cp "bin;lib/*" Main.WebServer
 ```
 
 5. 访问系统
-- 用户端：http://localhost:8080/login.html
-- 管理员端：http://localhost:8080/admin.html
+- 用户端：http://localhost:8080/html/login.html
+- 管理员端：http://localhost:8080/html/admin.html
 
 ### 默认账户
 
