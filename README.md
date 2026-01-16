@@ -344,41 +344,41 @@ java -cp "bin;lib/*" Main.WebServer
 ### 用户端功能
 
 #### 登录页面
-![登录页面](images/login.png)
+![登录页面](web/images/login.png)
 - 用户登录界面，支持用户名和密码验证
 - 提供注册链接和记住密码功能
 
 #### 注册页面
-![注册页面](images/register.png)
+![注册页面](web/images/register.png)
 - 新用户注册界面
 - 包含用户名、密码、确认密码等必填字段
 
 #### 用户主页面
-![用户主页面](images/user-home.png)
+![用户主页面](web/images/user-home.png)
 - 用户登录后的主界面
 - 显示用户信息、余额、公告等
 - 提供导航菜单访问各功能模块
 
 #### 车次浏览与订票
-![车次浏览](images/bus-list.png)
+![车次浏览](web/images/bus-list.png)
 - 显示所有可用车次信息
 - 支持按出发地、目的地筛选
 - 显示票价、剩余座位数等详细信息
 
 #### 订单管理
-![订单管理](images/user-orders.png)
+![订单管理](web/images/user-orders.png)
 - 查看用户的订票记录
 - 显示订单状态、车次信息、乘客信息
 - 支持退票申请操作
 
 #### 乘客管理
-![乘客管理](images/passengers.png)
+![乘客管理](web/images/passengers.png)
 - 管理常用乘客信息
 - 支持添加、编辑、删除乘客
 - 方便快速订票时选择乘客
 
 #### 退票申请
-![退票申请](images/refund-application.png)
+![退票申请](web/images/refund-application.png)
 - 提交退票申请界面
 - 显示退款金额计算规则
 - 支持查看退票申请状态
@@ -386,35 +386,35 @@ java -cp "bin;lib/*" Main.WebServer
 ### 管理员端功能
 
 #### 管理员登录
-![管理员登录](images/admin-login.png)
+![管理员登录](web/images/admin-login.png)
 - 管理员专用登录界面
 - 与用户端分离的权限验证
 
 #### 管理员主页面
-![管理员主页面](images/admin-home.png)
+![管理员主页面](web/images/admin-home.png)
 - 管理员功能主界面
 - 显示系统统计信息和快捷操作
 
 #### 车次管理
-![车次管理](images/bus-management.png)
+![车次管理](web/images/bus-management.png)
 - 管理所有车次信息
 - 支持添加、编辑、删除车次
 - 实时更新座位信息
 
 #### 订单管理
-![订单管理](images/admin-orders.png)
+![订单管理](web/images/admin-orders.png)
 - 查看所有用户的订单
 - 支持订单状态管理
 - 提供订单搜索和筛选功能
 
 #### 退票申请审批
-![退票审批](images/refund-approval.png)
+![退票审批](web/images/refund-approval.png)
 - 管理员审批退票申请界面
 - 显示申请详情和退款金额
 - 支持批准或拒绝操作
 
 #### 公告管理
-![公告管理](images/announcement-management.png)
+![公告管理](web/images/announcement-management.png)
 - 发布和管理系统公告
 - 支持公告的发布、取消、重新发布
 - 公告内容实时推送到用户端
