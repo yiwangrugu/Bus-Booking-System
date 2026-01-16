@@ -121,14 +121,13 @@ BookingSystem/
 
 基于代码分析，系统包含以下主要数据表：
 
-#### 1. users 表 - 用户信息
+#### 1. user 表 - 用户信息
 ```sql
-CREATE TABLE users (
+CREATE TABLE user (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     userName VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
-    power VARCHAR(20) DEFAULT '用户',
-    balance DECIMAL(10,2) DEFAULT 0.00
+    power VARCHAR(20) DEFAULT '用户'
 );
 ```
 
@@ -137,7 +136,6 @@ CREATE TABLE users (
 - `userName`: 用户名，唯一标识
 - `password`: 密码
 - `power`: 权限（用户/管理员）
-- `balance`: 用户余额
 
 #### 2. bus 表 - 车次信息
 ```sql
@@ -173,7 +171,7 @@ CREATE TABLE book_ticket (
     passengerName VARCHAR(50),
     passengerPhone VARCHAR(20),
     FOREIGN KEY (bno) REFERENCES bus(bno),
-    FOREIGN KEY (userName) REFERENCES users(userName)
+    FOREIGN KEY (userName) REFERENCES user(userName)
 );
 ```
 
@@ -195,7 +193,7 @@ CREATE TABLE passenger (
     name VARCHAR(50) NOT NULL,
     tel VARCHAR(20),
     PRIMARY KEY (userName, idno),
-    FOREIGN KEY (userName) REFERENCES users(userName)
+    FOREIGN KEY (userName) REFERENCES user(userName)
 );
 ```
 
@@ -222,7 +220,7 @@ CREATE TABLE refund_application (
     passengerName VARCHAR(50),
     passengerPhone VARCHAR(20),
     FOREIGN KEY (btno) REFERENCES book_ticket(btno),
-    FOREIGN KEY (userName) REFERENCES users(userName),
+    FOREIGN KEY (userName) REFERENCES user(userName),
     FOREIGN KEY (bno) REFERENCES bus(bno)
 );
 ```
@@ -264,16 +262,17 @@ CREATE TABLE announcements (
 ```sql
 CREATE TABLE refund_ticket (
     btno INTEGER PRIMARY KEY,
+    userName VARCHAR(50) NOT NULL,
     bno INTEGER NOT NULL,
+    idno VARCHAR(18) NOT NULL,
     rdate DATE NOT NULL,
     rtime TIME NOT NULL,
-    idno VARCHAR(18) NOT NULL,
-    passengerName VARCHAR(50),
-    passengerPhone VARCHAR(20),
     staName VARCHAR(100),
     endName VARCHAR(100),
     date DATE,
     time TIME,
+    passengerName VARCHAR(50),
+    passengerPhone VARCHAR(20),
     price DECIMAL(8,2),
     refundAmount DECIMAL(8,2),
     FOREIGN KEY (btno) REFERENCES book_ticket(btno),
@@ -283,16 +282,17 @@ CREATE TABLE refund_ticket (
 
 **字段说明：**
 - `btno`: 订单号，主键，外键
+- `userName`: 用户名
 - `bno`: 车次号，外键
+- `idno`: 乘客身份证号
 - `rdate`: 退票日期
 - `rtime`: 退票时间
-- `idno`: 乘客身份证号
-- `passengerName`: 乘客姓名
-- `passengerPhone`: 乘客电话
 - `staName`: 出发站
 - `endName`: 终点站
 - `date`: 发车日期
 - `time`: 发车时间
+- `passengerName`: 乘客姓名
+- `passengerPhone`: 乘客电话
 - `price`: 原票价
 - `refundAmount`: 退款金额
 
